@@ -2,7 +2,7 @@ import java.util.*;
 
 public class GestaoAcesso
 {
-    private ArrayList<Candidato> candidato;
+    private static ArrayList<Candidato> candidato;
 
 
     public GestaoAcesso()
@@ -10,7 +10,7 @@ public class GestaoAcesso
         this.candidato = new ArrayList<Candidato>();
     }
 
-    public List<Candidato> getCandidato() { return candidato; }
+    public static List<Candidato> getCandidato() { return candidato; }
 
     //Adiciona Candidatos 
     public void addCandidato(Candidato c)

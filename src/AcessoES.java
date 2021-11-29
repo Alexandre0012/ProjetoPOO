@@ -4,7 +4,7 @@ import java.util.*;
 
 public class AcessoES
 {
-    public static void main(String[] args)
+    public static void main(String[] args) throws IOException, FileNotFoundException, ClassNotFoundException
     {
 
         GestaoAcesso gestaoacesso = new GestaoAcesso();
@@ -12,12 +12,44 @@ public class AcessoES
 
         Scanner scanI = new Scanner(System.in);   //Integer scanner
         Scanner scanS = new Scanner(System.in);   //String scanner
-        Scanner scanD = new Scanner(System.in);   //Double scanner
+        //Scanner scanD = new Scanner(System.in);   //Double scanner
 
         Candidato c = null;
+        Curso cur = null;
+
+        final String fileName= "AcessoData.ser";
+
+        List<Candidato> acesso;
 
         int opc1=-1;  //opcao menu1
-        int id;
+        int idd,aux;
+
+
+        //Ler Ficheiro de dados
+        File f = new File(fileName);
+
+        // Check if the specified file
+        // Exists or not
+        if (f.exists())
+        {
+            try(FileInputStream fis= new FileInputStream(fileName))
+            {
+                try(ObjectInputStream ois= new ObjectInputStream(fis))
+                {
+                    acesso = (List<Candidato>)ois.readObject();
+                    for(Candidato can : acesso)
+                        gestaoacesso.addCandidato(can.clone());
+                }
+                catch(IOException e)
+                {
+                    System.out.println("Erro!");
+                }
+            }
+            catch(ClassNotFoundException b){}
+        }
+
+
+
 
         //Menu
         do
@@ -35,10 +67,7 @@ public class AcessoES
 
             switch(opc1)
             {
-                case 0:
-                    System.out.print("Obrigado por usar a nossa aplicação!!\n");
-                    System.exit(0);
-                    break;
+
 
                 case 1:
                     clearScreen();
@@ -65,7 +94,7 @@ public class AcessoES
                     System.out.print("Aluno/a de Regiao Desfavorecida? ** 1-SIM || 2-NÃO **");
                     int cReg = scanS.nextInt();
 
-                    id = 0;
+                    idd = 0;
 
                     if(cReg == 1)
                     {
@@ -73,7 +102,7 @@ public class AcessoES
                         int cRegCode = scanI.nextInt();
 
                         AlunoRegioes areg = new AlunoRegioes(cNome, cGenero, cNotaA, cNotaB, cNotaIng, cNotaSec, cRegCode);
-                        id = areg.getID();
+                        idd = areg.getID();
                         gestaoacesso.addCandidato(areg.clone());
                     }
 
@@ -85,16 +114,16 @@ public class AcessoES
                         System.out.print("Introduza o nível de necessidade: ");
                         int cNivelNecessidade = scanI.nextInt();
 
-                        System.out.print("Introduza o Tipo de Incapacidade (ex: Motora, sensorial): ");
+                        System.out.print("Introduza o Tipo de Incapacidade (ex: Motora, sensorial, visual): ");
                         String cTipoIncap = scanS.nextLine();
 
                         AlunoEspeciais ae = new AlunoEspeciais(cNome, cGenero, cNotaA, cNotaB, cNotaIng, cNotaSec, cNivelNecessidade, cTipoIncap);
-                        id = ae.getID();
+                        idd = ae.getID();
                         gestaoacesso.addCandidato(ae.clone());
                     }
 
                     AlunoRegular ar = new AlunoRegular(cNome, cGenero, cNotaA, cNotaB, cNotaIng, cNotaSec);
-                    id = ar.getID();
+                    idd = ar.getID();
                     gestaoacesso.addCandidato(ar.clone());
 
                     break;
@@ -136,6 +165,40 @@ public class AcessoES
                             System.out.println("Id inválido!! ");
                         }
                     }
+                    break;
+
+                case 0:
+                    System.out.print("Obrigado por usar a nossa aplicação!!\n");
+
+                    try
+                    {
+                        char x = (char)System.in.read();
+                    }
+                    catch(IOException ioEx)
+                    {
+                        System.out.println("Nao conseguiu ler");
+                    }
+                    clearScreen();
+
+                    try(FileOutputStream fos= new FileOutputStream(fileName))
+                    {
+                        char x = (char)System.in.read();
+                        ObjectOutputStream oos= new ObjectOutputStream(fos);
+                        oos.writeObject(GestaoAcesso.getCandidato());
+                        oos.close();
+                    }
+                    catch(FileNotFoundException fEx)
+                    {
+                        System.out.println("Ficheiro não encontrado!");
+                    }
+
+
+                    finally
+                    {
+                        System.exit(0);
+                    }
+
+                    clearScreen();
 
                     break;
 

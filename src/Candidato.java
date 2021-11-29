@@ -31,7 +31,6 @@ public abstract class Candidato
         count++;
     }
 
-
     //Construtor 2
     public Candidato(String n, String g, int nA, int nB, int nI, int mS)
     {
@@ -81,6 +80,7 @@ public abstract class Candidato
     {
         if(obj == null || this.getClass() != obj.getClass())
             return false;
+
         Candidato c = (Candidato) obj;
 
         return this.getID() == c.getID();
