@@ -43,6 +43,7 @@ public abstract class Curso
                 "\nNºClausus: " + this.num;
     }
 
+    public abstract double calcmedia(Candidato c);
     public abstract Curso clone();
 }
 

@@ -1,22 +1,14 @@
 public class Engenharia extends Curso {
 
-
-    public Engenharia() {
-        super();
-    }
-
     public Engenharia(String n, String uni, int nu) {
         super(n,uni,nu);
     }
 
-
-    public Engenharia(Curso cur) {
-        super(cur);
+    public double calcmedia(Candidato c){
+        return c.getMediaSecundario() * 0.50 + c.getNotaA() * 0.25 + c.getNotaB() * 0.25;
     }
 
-
-
     public Engenharia clone() {
-        return new Engenharia(this);
+        return new Engenharia(super.getNome(), super.getUni(), super.getNum());
     }
 }

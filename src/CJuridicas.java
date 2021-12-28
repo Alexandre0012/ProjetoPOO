@@ -4,24 +4,17 @@ public class CJuridicas extends Curso{
 
     //private ArrayList<> ListaCjuridicas;
 
-    public CJuridicas() {
-        super();
-    }
-
     public CJuridicas(String n, String uni, int nu) {
         super(n,uni,nu);
         //this.ListaHumanidades = new listaHumanidades<>();
     }
 
-
-    public CJuridicas(Curso cur) {
-        super(cur);
+    public double calcmedia(Candidato c){
+        return c.getMediaSecundario()*0.50 + c.getNotaA()*0.50;
     }
 
-
-
     public CJuridicas clone() {
-        return new CJuridicas(this);
+        return new CJuridicas(super.getNome(), super.getUni(), super.getNum());
     }
 
 }
