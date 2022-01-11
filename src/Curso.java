@@ -1,3 +1,4 @@
+import java.util.*;
 
 public abstract class Curso
 {
@@ -5,6 +6,7 @@ public abstract class Curso
     private String nome;
     private String uni;
     private int num;
+    private TreeSet<Candidato>ListaColocados;
 
     //Construtor 1
     public Curso()
@@ -28,12 +30,28 @@ public abstract class Curso
         this.nome = cur.getNome();
         this.uni = cur.getUni();
         this.num = cur.getNum();
+        this.ListaColocados = new TreeSet<Candidato>();
     }
 
     //Métodos
     public String getNome() { return this.nome; }
     public String getUni() { return this.uni; }
     public int getNum() { return this.num; }
+
+    public void add(Candidato c)
+    { this.ListaColocados.add(c);}
+    public void remove(Candidato c)
+    { this.ListaColocados.remove(c);}
+    public boolean existe(Candidato c)
+    { return this.ListaColocados.contains(c);}
+
+    public TreeSet<Candidato> colocados()
+    {
+        TreeSet<Candidato> temp = new TreeSet<Candidato>();
+        for(Candidato c: this.ListaColocados)
+            temp.add(c);
+        return temp;
+    }
 
 
     public String toString()

@@ -1,4 +1,9 @@
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.TreeSet;
+
 public class Engenharia extends Curso {
+
 
     public Engenharia(String n, String uni, int nu) {
         super(n,uni,nu);

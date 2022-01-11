@@ -91,6 +91,13 @@ public class AcessoES
                     System.out.print("Media Secundário: ");
                     int cNotaSec = scanI.nextInt();
 
+                    /*HashMap<String, Curso> listacursos = new HashMap<>();
+                    int i= 0;
+                    while(i<5){
+                        int curso = scanI.nextInt();
+                        listacursos.put("", curso);
+                    }*/
+
                     System.out.print("Aluno/a de Regiao Desfavorecida? ** 1-SIM || 2-NÃO **");
                     int cReg = scanS.nextInt();
 
@@ -102,8 +109,9 @@ public class AcessoES
                         int cRegCode = scanI.nextInt();
 
                         AlunoRegioes areg = new AlunoRegioes(cNome, cGenero, cNotaA, cNotaB, cNotaIng, cNotaSec, cRegCode);
-                        idd = areg.getID();
+                        idd = areg.id;
                         gestaoacesso.addCandidato(areg.clone());
+
                     }
 
                     System.out.print("Aluno/a com necessidades especiais? ** 1-SIM || 2-NÃO **");
@@ -118,12 +126,12 @@ public class AcessoES
                         String cTipoIncap = scanS.nextLine();
 
                         AlunoEspeciais ae = new AlunoEspeciais(cNome, cGenero, cNotaA, cNotaB, cNotaIng, cNotaSec, cNivelNecessidade, cTipoIncap);
-                        idd = ae.getID();
+                        idd = ae.id;
                         gestaoacesso.addCandidato(ae.clone());
                     }
 
                     AlunoRegular ar = new AlunoRegular(cNome, cGenero, cNotaA, cNotaB, cNotaIng, cNotaSec);
-                    idd = ar.getID();
+                    idd = ar.id;
                     gestaoacesso.addCandidato(ar.clone());
 
                     break;
@@ -148,6 +156,12 @@ public class AcessoES
                     break;
 
                 case 3:
+                    System.out.print("cheguei aqui ");
+                    TreeSet<Candidato>temp = new TreeSet<Candidato>();
+                    temp = gestaoacesso.candidatura();
+                    for(Candidato c1: temp){
+                        System.out.println(temp);
+                    }
 
                     break;
 
@@ -157,7 +171,7 @@ public class AcessoES
 
                     boolean check = false;
                     for(Candidato c1: GestaoAcesso.getCandidato()){
-                        if(aux == c1.getID()){
+                        if(aux == c1.id){
                             check = true;
                             System.out.println('\n'+ c1.toString() +'\n');
                         }else{
