@@ -6,7 +6,7 @@ public class GestaoAcesso
     //private static ArrayList<Candidato> candidato;
     private HashMap<Integer, Candidato> listaCandidatos = new HashMap<>();
     private HashMap<Integer, Curso> listaCursos = new HashMap<>();
-    //private static ArrayList<Curso> curso;
+    private static ArrayList<Curso> curso;
     //private ArrayList<> ListaCjuridicas;
 
 
@@ -15,26 +15,26 @@ public class GestaoAcesso
         //this.candidato = new ArrayList<Candidato>();
         this.listaCandidatos= new HashMap<Integer, Candidato>();
         this.listaCursos = new HashMap<Integer, Curso>();
-        //this.curso = new ArrayList<Curso>();
+        this.curso = new ArrayList<Curso>();
         //this.ListaCjuridicas = new ArrayList<Curso>();
     }
 
     //public static List<Candidato> getCandidato() { return candidato; }
-    //public static List<Curso> getCurso() { return curso; }
+    public static List<Curso> getCurso() { return curso; }
 
     /*Adiciona Candidatos
     public void addCandidato(Candidato c)
     {
         if(c != null)
             candidato.add(c.clone());
-    }
+    }*/
 
     //Adiciona Cursos
     public void addCurso(Curso cur)
     {
         if(cur != null)
             curso.add(cur.clone());
-    }*/
+    }
 
     public void novoCandidato(int id, Candidato novo){
         this.listaCandidatos.put(id, novo.clone());
@@ -44,7 +44,18 @@ public class GestaoAcesso
         this.listaCursos.put(id, novo.clone());
     }
 
+    public void ShowCursos(){
+        int i = 1;
+        for(Curso c: curso){
+            System.out.println(i + ":" + "Nome: " + c.getNome() + "Universidade: " + c.getUni());
+            i++;
+        }
+    }
 
+    public boolean candidatoExiste(int id){
+        if(this.listaCandidatos.containsKey(id)) return true;
+        else return false;
+    }
 
 
     public void lerFicheiro(){

@@ -3,8 +3,8 @@ import java.util.HashMap;
 public class AlunoRegular extends Candidato
 {
 
-    public AlunoRegular(String n, String g, int nA, int nB, int nI, int mS){
-        super(n,g,nA,nB,nI,mS);
+    public AlunoRegular(String n, String g, int id, int nA, int nB, int nI, int mS){
+        super(n,g,id,nA,nB,nI,mS);
     }
 
     /*public HashMap<Double, Curso>candidatura(int id, Curso a, Curso b, Curso c, Curso d, Curso e){
@@ -25,7 +25,7 @@ public class AlunoRegular extends Candidato
 
     public AlunoRegular clone()
     {
-        return new AlunoRegular(super.getNome(), super.getGenero(), super.getNotaA(),
+        return new AlunoRegular(super.getNome(), super.getGenero(), super.getID(), super.getNotaA(),
                 super.getNotaB(), super.getNotaIngles(), super.getMediaSecundario());
     }
 
