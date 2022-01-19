@@ -5,7 +5,7 @@ public class Biociencias extends Curso{
     }
 
     public double calcmedia(Candidato c){
-        return c.getMediaSecundario()*0.50 + c.getNotaA()*0.40 + c.getNotaIngles()*0.10;
+        return c.getMediaSecundario()*0.50 + c.getNotaA()*0.40 + c.getNotaIngles()*0.10 + c.getBonus();
     }
 
     public Biociencias clone() {

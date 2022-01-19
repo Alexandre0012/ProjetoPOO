@@ -28,9 +28,8 @@ public class AcessoES
             clearScreen();
             System.out.println("1. Registar Candidato");
             System.out.println("2. Registar Curso");
-            System.out.println("3. Registar Candidatura");
-            System.out.println("4. Mostrar Resultado da Candidatura");
-            System.out.println("5. Listar");
+            System.out.println("3. Mostrar Resultado da Candidatura");
+            System.out.println("4. Listar");
             System.out.println("0. EXIT");
 
             System.out.print("Escolha a sua opção: ");
@@ -68,10 +67,21 @@ public class AcessoES
                     if (cReg == 1) {
                         System.out.print("Introduza o código da Regiao Desfavorecida: ");
                         int cRegCode = scanI.nextInt();
+                        int bonus = 20;
 
-                        AlunoRegioes areg = new AlunoRegioes(cNome, cGenero, idd, cNotaA, cNotaB, cNotaIng, cNotaSec, cRegCode);
+                        AlunoRegioes areg = new AlunoRegioes(cNome, cGenero, idd, cNotaA, cNotaB, cNotaIng, cNotaSec, bonus, cRegCode);
                         idd = areg.getID();
-                        gestaoacesso.novoCandidato(idd, areg.clone());
+                        gestaoacesso.addCandidato(areg.clone());
+
+                        System.out.println("** Lista de cursos: **");
+                        gestaoacesso.showCursos();
+                        int i = 0;
+                        while(i < 5){
+                            System.out.println("Escolha até 5 cursos");
+                            int opcCurso = scanI.nextInt();
+                            gestaoacesso.adicionaEscolha(areg.clone(), opcCurso);
+                            i++;
+                        }
                     }
 
                     System.out.print("Aluno/a com necessidades especiais? ** 1-SIM || 2-NÃO **");
@@ -83,15 +93,38 @@ public class AcessoES
 
                         System.out.print("Introduza o Tipo de Incapacidade (ex: Motora, sensorial, visual): ");
                         String cTipoIncap = scanS.nextLine();
+                        int bonus1 = 50;
 
-                        AlunoEspeciais ae = new AlunoEspeciais(cNome, cGenero, idd, cNotaA, cNotaB, cNotaIng, cNotaSec, cNivelNecessidade, cTipoIncap);
+                        AlunoEspeciais ae = new AlunoEspeciais(cNome, cGenero, idd, cNotaA, cNotaB, cNotaIng, cNotaSec, bonus1, cNivelNecessidade, cTipoIncap);
                         idd = ae.getID();
-                        gestaoacesso.novoCandidato(idd, ae.clone());
+                        gestaoacesso.addCandidato(ae.clone());
+
+                        System.out.println("** Lista de cursos: **");
+                        gestaoacesso.showCursos();
+                        int i = 0;
+                        while(i < 5){
+                            System.out.println("Escolha até 5 cursos");
+                            int opcCurso = scanI.nextInt();
+                            gestaoacesso.adicionaEscolha(ae.clone(), opcCurso);
+                            i++;
+                        }
                     }
-                    System.out.println("id: " + idd);
-                    AlunoRegular ar = new AlunoRegular(cNome, cGenero, idd, cNotaA, cNotaB, cNotaIng, cNotaSec);
+                    int bonus3 = 0;
+                    AlunoRegular ar = new AlunoRegular(cNome, cGenero, idd, cNotaA, cNotaB, cNotaIng, cNotaSec, bonus3);
                     idd = ar.getID();
-                    gestaoacesso.novoCandidato(idd,ar.clone());
+                    gestaoacesso.addCandidato(ar.clone());
+
+
+                    System.out.println("** Lista de cursos: **");
+                    gestaoacesso.showCursos();
+                    int i = 0;
+                    while(i < 5){
+                        System.out.println("Escolha até 5 cursos");
+                        int opcCurso = scanI.nextInt();
+                        gestaoacesso.adicionaEscolha(ar.clone(), opcCurso);
+                        i++;
+                    }
+
                     break;
 
                 case 2:
@@ -119,34 +152,36 @@ public class AcessoES
 
                     if (opctipocurso == 1) {
                         Biociencias bio = new Biociencias(NomeUni, NomeCurso, NumClaus);
-                        gestaoacesso.novoCurso(idcurso, bio.clone());
+                        gestaoacesso.addCurso(bio.clone());
                         break;
                     }
                     if (opctipocurso == 2) {
                         Ciencias cie = new Ciencias(NomeUni, NomeCurso, NumClaus);
-                        gestaoacesso.novoCurso(idcurso, cie.clone());
+                        gestaoacesso.addCurso(cie.clone());
                         break;
                     }
                     if (opctipocurso == 3) {
                         CJuridicas juri = new CJuridicas(NomeUni, NomeCurso, NumClaus);
-                        gestaoacesso.novoCurso(idcurso, juri.clone());
+                        gestaoacesso.addCurso(juri.clone());
                         break;
                     }
                     if (opctipocurso == 4) {
                         Engenharia eng = new Engenharia(NomeUni, NomeCurso, NumClaus);
-                        gestaoacesso.novoCurso(idcurso, eng.clone());
                         gestaoacesso.addCurso(eng.clone());
                         break;
                     }
                     if (opctipocurso == 5) {
                         Humanidades hum = new Humanidades(NomeUni, NomeCurso, NumClaus);
-                        gestaoacesso.novoCurso(idcurso, hum.clone());
+                        gestaoacesso.addCurso(hum.clone());
                         break;
                     }
 
                 case 3:
                     clearScreen();
-                    System.out.println("** Registo da candidatura ** ");
+                    //gestaoacesso.addTodosCandidatosTodososCursos();
+                    gestaoacesso.teste();
+
+
 
                     System.out.println("Introduza o seu id: ");
                     int id = scanI.nextInt();
@@ -157,11 +192,7 @@ public class AcessoES
                         id = scanI.nextInt();
                     }
 
-                    gestaoacesso.ShowCursos();
-                    int opcCurso = scanI.nextInt();
-
-
-
+                    gestaoacesso.mostraResultadoCandidatura(id);
 
                     /*System.out.println("Introduza a sua primeira escolha: ");
                     String nomeCan1 = scanS.nextLine();
@@ -183,7 +214,15 @@ public class AcessoES
                     break;
 
                 case 4:
-
+                    System.out.println("Introduza o ID do candidato:");
+                    int idCandidato = scanI.nextInt();
+                    if(gestaoacesso.candidatoExiste(idCandidato)){
+                        for(Candidato candidato: gestaoacesso.getListaCandidato()){
+                            if(idCandidato == candidato.getID()){
+                                System.out.println(candidato.getAprovado());
+                            }
+                        }
+                    }
                     break;
 
                 case 5:

@@ -6,11 +6,10 @@ public class CJuridicas extends Curso{
 
     public CJuridicas(String n, String uni, int nu) {
         super(n,uni,nu);
-        //this.ListaHumanidades = new listaHumanidades<>();
     }
 
     public double calcmedia(Candidato c){
-        return c.getMediaSecundario()*0.50 + c.getNotaA()*0.50;
+        return c.getMediaSecundario()*0.50 + c.getNotaA()*0.50 + c.getBonus();
     }
 
     public CJuridicas clone() {

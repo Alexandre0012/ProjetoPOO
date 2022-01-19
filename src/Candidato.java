@@ -10,12 +10,11 @@ public abstract class Candidato
     private int nota_exame_B;
     private int nota_ingles;
     private int media_secundario;
-    private boolean colocado;
+    private int bonus;
+    private boolean aprovado;
+    private ArrayList<Curso> ListaCursosDoCandidato;
 
-    //private int bonus;
-    private HashMap<String, Curso> ListaC;
-
-    public Candidato(String n, String g, int id, int nA, int nB, int nI, int mS)
+    public Candidato(String n, String g, int id, int nA, int nB, int nI, int mS, int b)
     {
         this.nome = n;
         this.genero = g;
@@ -24,21 +23,9 @@ public abstract class Candidato
         this.nota_exame_B = nB;
         this.nota_ingles = nI;
         this.media_secundario = mS;
-        this.colocado = true;
-        this.ListaC = new HashMap<String,Curso>();
-    }
-
-    //Construtor 3
-    public Candidato(Candidato c)
-    {
-        this.nome = c.getNome();
-        this.genero = c.getGenero();
-        this.nota_exame_A = c.getNotaA();
-        this.nota_exame_B = c.getNotaB();
-        this.nota_ingles = c.getNotaIngles();
-        this.media_secundario = c.getMediaSecundario();
-        this.colocado = true;
-        this.id = getID();
+        this.bonus = b;
+        this.aprovado = false;
+        this.ListaCursosDoCandidato = new ArrayList<Curso>();
     }
 
 
@@ -50,74 +37,56 @@ public abstract class Candidato
     public int getNotaB(){ return this.nota_exame_B; }
     public int getNotaIngles(){ return this.nota_ingles; }
     public int getMediaSecundario(){ return this.media_secundario; }
-    public void addCurso(Curso curso)
+    public int getBonus(){ return this.bonus; }
+    public boolean getAprovado(){ return this.aprovado; }
+    public void addCursoAoCandidato(Curso curso)
     {
-        this.ListaC.put("", curso.clone());
+        this.ListaCursosDoCandidato.add(curso.clone());
     }
 
-    //public int getBonus(){ return this.bonus; }
-
-    /*public void setBonus(int b) //bonus = b
+    public List<Curso> getCursoDoCandidato()
     {
-        this.bonus = b;
-    }*/
-
-
-    public HashMap<String, Curso> aprovacao(HashMap<String, Curso> temp, int pos){
-
-        int i = 0;
-
-        for(String s: this.ListaC.keySet()){
-            Curso c = ListaC.get(s);
-            switch (pos) {
-                case 0: {
-                    this.ListaC.replace("aprovado", c);
-                    this.colocado = true;
-                    break;
-                }
-                case 1:{
-                    if (i == 1) {
-                        this.ListaC.replace("aprovado", c);
-                        this.colocado = true;
-                    }
-                    this.ListaC.replace("", c);
-                    break;
-                }
-                case 2:{
-                    if (i == 2) {
-                        this.ListaC.replace("aprovado", c);
-                        this.colocado = true;
-                    }
-                    this.ListaC.replace("", c);
-                    break;
-                }
-                case 3:{
-                    if (i == 3) {
-                        this.ListaC.replace("aprovado", c);
-                        this.colocado = true;
-                    }
-                    this.ListaC.replace("", c);
-                    break;
-                }
-                case 4:{
-                    if (i == 4) {
-                        this.ListaC.replace("aprovado", c);
-                        this.colocado = true;
-                    }
-                    this.ListaC.replace("", c);
-                    break;
-                }
-                case 5:{
-                    this.ListaC.replace("Nao aprovado", c);
-                    this.colocado = false;
-                    break;
-                }
-            }
-            i++;
-        }
-
+        ArrayList<Curso> temp = new ArrayList<Curso>();
+        for(Curso c: this.ListaCursosDoCandidato)
+            temp.add(c);
         return temp;
     }
+
+    public void showListaCursosDoCandidato(){
+        for(Curso curso: ListaCursosDoCandidato){
+            System.out.println(curso.getNome());
+        }
+    }
+
+    public void retiraCandidatosDasOpcoes(Candidato c, int pos){
+        int i = 1;
+        for(Curso curso: this.ListaCursosDoCandidato){
+            if(i == pos){
+                c.aprovado = true;
+            }
+            else curso.remove(c);
+
+            i++;
+        }
+    }
+
+    /*public void aprovacao(){
+
+        for(Curso curso: this.ListaC.values()){
+           // curso.retiraCandidatos();
+            if(curso.retiraCandidatos(this, curso)){
+                this.ListaC.replace("aprovado", curso.clone());
+                this.aprovado = true;
+            }
+            else {
+                this.ListaC.replace("reprovado", curso.clone());
+                curso.remove(this);
+                this.aprovado = false;
+            }
+
+        }
+
+    }*/
 
     //Métodos Comuns 
     public boolean equals(Object obj)

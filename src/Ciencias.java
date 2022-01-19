@@ -5,7 +5,7 @@ public class Ciencias extends Curso{
     }
 
     public double calcmedia(Candidato c){
-        return c.getMediaSecundario()*0.25 + c.getNotaA()*0.25 + c.getNotaB()*0.25 + c.getNotaIngles()*0.25;
+        return c.getMediaSecundario()*0.25 + c.getNotaA()*0.25 + c.getNotaB()*0.25 + c.getNotaIngles()*0.25 + c.getBonus();
     }
 
     public Ciencias clone() {
