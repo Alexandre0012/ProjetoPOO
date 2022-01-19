@@ -214,18 +214,6 @@ public class AcessoES
                     break;
 
                 case 4:
-                    System.out.println("Introduza o ID do candidato:");
-                    int idCandidato = scanI.nextInt();
-                    if(gestaoacesso.candidatoExiste(idCandidato)){
-                        for(Candidato candidato: gestaoacesso.getListaCandidato()){
-                            if(idCandidato == candidato.getID()){
-                                System.out.println(candidato.getAprovado());
-                            }
-                        }
-                    }
-                    break;
-
-                case 5:
                     do {
                         clearScreen();
                         System.out.println("1. Listar Colocados");
