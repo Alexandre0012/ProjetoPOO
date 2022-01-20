@@ -1,12 +1,13 @@
 import java.io.*;
 import java.util.*;
+import java.util.spi.CalendarNameProvider;
 
 public class GestaoAcesso implements Serializable
 {
     private static ArrayList<Candidato> candidatos;   //lista de todos os candidatos
     private static ArrayList<Curso> curso;            //lista de todos os cursos
-    private static HashMap<Candidato, ArrayList<Curso>> ListadeCandidatos;
-    private static HashMap<Curso, TreeSet<Candidato>> ListadeCursos;
+    private static HashMap<Candidato, ArrayList<Curso>> ListadeCandidatos;   //map com todos os candidatos e respetiva lista de cursos
+    private static HashMap<Curso, TreeSet<Candidato>> ListadeCursos;         //map com todos os cursos e respetiva lista de candidatos
 
 
     public GestaoAcesso()
@@ -82,18 +83,27 @@ public class GestaoAcesso implements Serializable
         }
     }
 
+    public void escolheCurso(Candidato candidato, int opc){
+        int i = 0;
+        for(Curso curso: ListadeCursos.keySet()){
+            if(i == opc){
+                adicionaCursoAoCandidato(candidato, curso);
+                adicionaCandidatoAoCurso(candidato,curso);
+            }
+        }
+    }
+
     public void showCursos(){
         int i = 1;
-        for(Curso c: curso){
+        for(Curso c: ListadeCursos.keySet()){
             System.out.println(i + ":" + "Nome: " + c.getNome() + "Universidade: " + c.getUni());
             i++;
         }
     }
 
     public void showCandidatos(){
-        for(Candidato c: candidatos){
+        for(Candidato c: ListadeCandidatos.keySet()){
             System.out.println(c.getNome());
-            c.showListaCursosDoCandidato();
         }
     }
 
@@ -109,15 +119,25 @@ public class GestaoAcesso implements Serializable
         }
     }
 
+    public void adicionaCursoAoCandidato(Candidato candidato, Curso curso){
+        for(Candidato c: ListadeCandidatos.keySet()){
+            ArrayList<Curso> temp = ListadeCandidatos.get(c);
+            if(c.equals(candidato)) temp.add(curso);
+        }
+    }
+
+    public void adicionaCandidatoAoCurso(Candidato candidato, Curso curso){
+        for(Curso cc: ListadeCursos.keySet()){
+            TreeSet<Candidato> temp = ListadeCursos.get(cc);
+            if(cc.equals(curso)) temp.add(candidato);
+        }
+    }
+
     public void removeCandidatoDaListaDoCurso(Candidato candidato, Curso curso){
         for(Curso cc: ListadeCursos.keySet()){
             TreeSet<Candidato> temp = ListadeCursos.get(cc);
             if(cc.equals(curso)){
-                //System.out.println("alo vieira");
-                //System.out.println(temp);
                 temp.remove(candidato);
-                //System.out.println("alo tonio");
-                //System.out.println(temp);
             }
         }
     }
@@ -125,6 +145,14 @@ public class GestaoAcesso implements Serializable
     public boolean candidatoExiste(int x){
         for(Candidato c: ListadeCandidatos.keySet()){
             if(c.getID() == x) return true;
+        }
+        return false;
+    }
+
+    public boolean candidatoExisteNoCurso(Candidato candidato){
+        for(Curso cc: ListadeCursos.keySet()){
+            TreeSet<Candidato> temp = ListadeCursos.get(cc);
+            if(temp.contains(candidato)) return true;
         }
         return false;
     }
@@ -140,29 +168,7 @@ public class GestaoAcesso implements Serializable
         }
     }
 
-    public void addTodosCandidatosTodososCursos(){
-        for(Candidato candidato: candidatos){
-            for(Curso curso: candidato.getCursoDoCandidato()){
-                curso.addCandidatoColocado(candidato);
-            }
-        }
-    }
-
     public boolean verificaColocacao(Candidato c, Curso cc){
-        /*int i = 1;
-        Iterator<Candidato> temp = cc.ListaColocados.iterator();
-
-        while (temp.hasNext()){
-            System.out.println("cheguei aqui");
-            Candidato candidato = temp.next();
-            if(i <= this.getNum()){
-                System.out.println("cheguei aqui2");
-                if(candidato == c) return true;
-            }else return false;
-            i++;
-        }
-        return false;*/
-
         int i = 0;
         for(Curso curso: ListadeCursos.keySet()){
             TreeSet<Candidato> temp = ListadeCursos.get(curso);
@@ -172,20 +178,12 @@ public class GestaoAcesso implements Serializable
                     Candidato candidato = iterator.next();
                     i++;
                     if(i <= curso.getNum()){
-                        //System.out.println("ali");
                         if(candidato.equals(c)) return true;
                     }
                 }
                 i=0;
             }
         }
-
-        /*for(Candidato candidato: cc.getListaColocados()){
-            i++;
-            if(i <= cc.getNum()){              //cc.getNum()
-                if(candidato == c) return true;
-            }
-        }*/
         return false;
     }
 
@@ -196,12 +194,10 @@ public class GestaoAcesso implements Serializable
             if(c.equals(candidato)){
                 for(Curso curso: temp){
                     i++;
-                    if(i != pos){
-                        //curso.remove(candidato);
+                    if(i > pos){
                         removeCandidatoDaListaDoCurso(candidato,curso);
-                        //System.out.println("cheguei retira1");
                     }
-                    else //System.out.println("cheguei retira2");
+                    if(i == pos)
                         candidato.setAprovado();
                 }
                 i=0;
@@ -212,21 +208,20 @@ public class GestaoAcesso implements Serializable
 
     public void aprovacao(){
         int pos = 1;
-        for(Candidato candidato: candidatos){
-            //candidato.showListaCursosDoCandidato();
-            for(Curso curso: candidato.getCursoDoCandidato()){
-                //System.out.println("tou2" + curso.getListaColocados());
-                //curso.showListaColocados();
-                if(verificaColocacao(candidato, curso)){
-                    //System.out.println("tou3");
-                    retiraCandidatosDasOpcoes(candidato,pos);
+        for(Candidato candidato: ListadeCandidatos.keySet()){
+            ArrayList<Curso> temp = ListadeCandidatos.get(candidato);
+            for(Curso cc: temp){
+                if(verificaColocacao(candidato, cc)){
+                    retiraCandidatosDasOpcoes(candidato, pos);
                 }
+                else
+                    removeCandidatoDaListaDoCurso(candidato, cc);
+
                 pos++;
             }
             pos = 1;
         }
     }
-
 
     public void teste(){
 
@@ -262,8 +257,6 @@ public class GestaoAcesso implements Serializable
         ar5.addCursoAoCandidato(eng5.clone());ar5.addCursoAoCandidato(eng3.clone());
         ar5.addCursoAoCandidato(eng2.clone());ListadeCandidatos.put(ar5.clone(), ar5.getCursoDoCandidato());
 
-
-        //addTodosCandidatosTodososCursos();
         eng1.addCandidatoColocado(ar1.clone());eng1.addCandidatoColocado(ar2.clone());eng1.addCandidatoColocado(ar3.clone());
         eng1.addCandidatoColocado(ar4.clone());eng1.addCandidatoColocado(ar5.clone());ListadeCursos.put(eng1.clone(),eng1.getListaColocados());
 
@@ -279,58 +272,20 @@ public class GestaoAcesso implements Serializable
         eng5.addCandidatoColocado(ar1.clone());eng5.addCandidatoColocado(ar2.clone());eng5.addCandidatoColocado(ar3.clone());
         eng5.addCandidatoColocado(ar4.clone());eng5.addCandidatoColocado(ar5.clone());ListadeCursos.put(eng5.clone(),eng5.getListaColocados());
 
-        //aprovacao();
-        int pos = 1;
-        for(Candidato candidato: ListadeCandidatos.keySet()){
-            ArrayList<Curso> temp = ListadeCandidatos.get(candidato);
-            for(Curso cc: temp){
-                //System.out.println(cc);
-                if(verificaColocacao(candidato, cc)){
-                    //System.out.println("tou 3");
-                    retiraCandidatosDasOpcoes(candidato, pos);
-                }
-                else //System.out.println("tou 4");
-                    cc.remove(candidato);
-
-                pos++;
-            }
-            pos = 1;
-        }
-        showColocados();
-
     }
 
-    public void mostraColocacaoDoCandidato(Candidato c){
-
-        for(Curso curso: c.getCursoDoCandidato()){
-            if(curso.existe(c)){
-                 String str = curso.toString();
-                 System.out.println(str);
-            }
-        }
-    }
-
-
-    public boolean mostraResultadoCandidatura(int id){
+    public void mostraResultadoCandidatura(int id){
 
         for(Candidato candidato: ListadeCandidatos.keySet()){
             ArrayList<Curso> temp = ListadeCandidatos.get(candidato);
             if(candidato.getID() == id){
                 for(Curso c: temp){
-                    if(candidato.existe(c)){
-                        System.out.println("COLOCADO");
+                    if(candidatoExisteNoCurso(candidato)){
                         System.out.println("Colocado em: " + c);
-                        return true;
                     }
                 }
-                /*if(candidato.getAprovado()){
-                    System.out.println("COLOCADO");
-                    mostraColocacaoDoCandidato(candidato);
-                }
-                else System.out.println("NAO COLOCADO");*/
             }
         }
-        return false;
     }
 
 

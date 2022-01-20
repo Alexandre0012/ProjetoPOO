@@ -53,7 +53,7 @@ public abstract class Candidato implements Serializable
         return temp;
     }
 
-    public boolean existe(Curso c)
+    public boolean existeCurso(Curso c)
     { return this.ListaCursosDoCandidato.contains(c);}
 
     public void adicionaCursoaSuaLista(Curso c){

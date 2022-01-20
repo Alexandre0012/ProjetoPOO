@@ -71,17 +71,17 @@ public class AcessoES
 
                         AlunoRegioes areg = new AlunoRegioes(cNome, cGenero, idd, cNotaA, cNotaB, cNotaIng, cNotaSec, bonus, cRegCode);
                         idd = areg.getID();
+                        gestaoacesso.addCandidato(areg.clone());
 
                         System.out.println("** Lista de cursos: **");
                         gestaoacesso.showCursos();
+                        System.out.println("Escolha até 5 cursos");
                         int i = 0;
                         while(i < 5){
-                            System.out.println("Escolha até 5 cursos");
                             int opcCurso = scanI.nextInt();
                             gestaoacesso.adicionaEscolha(areg.clone(), opcCurso);
                             i++;
                         }
-                        gestaoacesso.addCandidato(areg.clone());
                         gestaoacesso.addListaCandidato(areg.clone(),areg.getCursoDoCandidato());
                     }
 
@@ -101,31 +101,31 @@ public class AcessoES
                         gestaoacesso.addCandidato(ae.clone());
 
                         System.out.println("** Lista de cursos: **");
+                        gestaoacesso.showCursos();
+                        System.out.println("Escolha até 5 cursos");
                         int i = 0;
                         while(i < 5){
-                            System.out.println("Escolha até 5 cursos");
                             int opcCurso = scanI.nextInt();
-                            gestaoacesso.adicionaEscolha(ae.clone(), opcCurso);
+                            gestaoacesso.escolheCurso(ae.clone(), opcCurso);
                             i++;
                         }
-                        gestaoacesso.showCursos();
                         gestaoacesso.addListaCandidato(ae.clone(),ae.getCursoDoCandidato());
                     }
                     if (cReg == 2 && cNesEsp == 2){
                         int bonus3 = 0;
                         AlunoRegular ar = new AlunoRegular(cNome, cGenero, idd, cNotaA, cNotaB, cNotaIng, cNotaSec, bonus3);
                         idd = ar.getID();
+                        gestaoacesso.addCandidato(ar.clone());
 
                         System.out.println("** Lista de cursos: **");
                         gestaoacesso.showCursos();
+                        System.out.println("Escolha até 5 cursos");
                         int i = 0;
                         while(i < 5){
-                            System.out.println("Escolha até 5 cursos");
                             int opcCurso = scanI.nextInt();
-                            gestaoacesso.adicionaEscolha(ar.clone(), opcCurso);
+                            gestaoacesso.escolheCurso(ar.clone(), opcCurso);
                             i++;
                         }
-                        gestaoacesso.addCandidato(ar.clone());
                         gestaoacesso.addListaCandidato(ar.clone(),ar.getCursoDoCandidato());
                     }
 
@@ -190,13 +190,12 @@ public class AcessoES
                     gestaoacesso.teste();
                     System.out.println("Introduza o seu id: ");
                     int id = scanI.nextInt();
-
                     while(!gestaoacesso.candidatoExiste(id)){
                         System.out.println("O candidato nao existe!");
                         System.out.println("Por favor introduza um id valido ");
                         id = scanI.nextInt();
                     }
-
+                    gestaoacesso.aprovacao();
                     gestaoacesso.mostraResultadoCandidatura(id);
 
                     /*System.out.println("Introduza a sua primeira escolha: ");
@@ -221,6 +220,8 @@ public class AcessoES
                 case 4:
                     do {
                         clearScreen();
+                        gestaoacesso.teste();
+                        gestaoacesso.aprovacao();
                         System.out.println("1. Listar Colocados");
                         System.out.println("2. Mostar Curso com média mais alta");
                         System.out.println("3. Mostrar Curso com média mais baixa");
@@ -234,12 +235,7 @@ public class AcessoES
 
                         switch (opc2) {
                             case 1:
-                                gestaoacesso.teste();
-                                for(Curso curso: gestaoacesso.getListaCurso()){
-                                    //gestaoacesso.aprovacao();
-                                    curso.showListaColocados();
-                                }
-
+                                gestaoacesso.showColocados();
                                 break;
 
                             case 2:
@@ -248,7 +244,7 @@ public class AcessoES
                         }
 
 
-                    } while (opc2 != 5);
+                    } while (opc2 != 0);
 
                     break;
 

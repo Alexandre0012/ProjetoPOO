@@ -51,14 +51,6 @@ public abstract class Curso implements Serializable
     { this.ListaColocados.remove(c);}
     public boolean existe(Candidato c)
     { return this.ListaColocados.contains(c);}
-    public void showListaColocados(){
-        System.out.println("\n" + this.getNome() + ",  " + this.getUni() + "\n");
-        for(Candidato candidato: this.ListaColocados){
-            System.out.println(candidato.getNome() + ", " + calcmedia(candidato));
-        }
-    }
-
-
 
     public String toString()
     {
