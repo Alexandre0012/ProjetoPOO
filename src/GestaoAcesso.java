@@ -3,18 +3,14 @@ import java.util.*;
 
 public class GestaoAcesso
 {
-    private HashMap<Integer, Candidato> listaCandidatos;
-    private HashMap<Integer, Curso> listaCursos;
     private static ArrayList<Candidato> candidatos;   //lista de todos os candidatos
     private static ArrayList<Curso> curso;            //lista de todos os cursos
 
 
     public GestaoAcesso()
     {
-        this.listaCandidatos= new HashMap<Integer, Candidato>();
-        this.listaCursos = new HashMap<Integer, Curso>();
-        this.curso = new ArrayList<Curso>();
-        this.candidatos = new ArrayList<Candidato>();
+        curso = new ArrayList<Curso>();
+        candidatos = new ArrayList<Candidato>();
     }
 
     public static List<Curso> getCurso() { return curso; }
@@ -34,14 +30,6 @@ public class GestaoAcesso
         for(Candidato c: candidatos)
             temp.add(c);
         return temp;
-    }
-
-    public void novoCandidato(int id, Candidato novo){
-        this.listaCandidatos.put(id, novo.clone());
-    }
-
-    public void novoCurso(int id, Curso novo){
-        this.listaCursos.put(id, novo.clone());
     }
 
     public void addCurso(Curso c)
@@ -71,8 +59,11 @@ public class GestaoAcesso
         }
     }
 
-    public boolean candidatoExiste(int id){
-        return this.listaCandidatos.containsKey(id);
+    public boolean candidatoExiste(int x){
+        for(Candidato c: candidatos){
+            if(c.getID() == x) return true;
+        }
+        return false;
     }
 
     public void adicionaEscolha(Candidato candidato, int opc){
@@ -80,6 +71,7 @@ public class GestaoAcesso
         for(Curso c: curso){
             if(i == opc){
                 candidato.addCursoAoCandidato(c.clone());
+                c.addCandidatoColocado(candidato);
             }
             i++;
         }
@@ -96,10 +88,11 @@ public class GestaoAcesso
     public void aprovacao(){
         int pos = 1;
         for(Candidato candidato: candidatos){
-            System.out.println("tou");
+            candidato.showListaCursosDoCandidato();
             for(Curso curso: candidato.getCursoDoCandidato()){
-                System.out.println("tou2");
-                if(curso.verificaColocacao(candidato)){
+                System.out.println("tou2" + curso.getListaColocados());
+                //curso.showListaColocados();
+                if(curso.verificaColocacao(candidato, curso)){
                     System.out.println("tou3");
                     candidato.retiraCandidatosDasOpcoes(candidato, pos);
                 }
@@ -120,16 +113,18 @@ public class GestaoAcesso
 
         AlunoRegular ar3 = new AlunoRegular("rica", "undefined", 9, 140, 140, 140, 140, 0);
 
-        ar1.addCursoAoCandidato(eng1);ar1.addCursoAoCandidato(eng2);candidatos.add(ar1);
-        ar2.addCursoAoCandidato(eng1);ar2.addCursoAoCandidato(eng2);candidatos.add(ar2);
-        ar3.addCursoAoCandidato(eng1);ar3.addCursoAoCandidato(eng2);candidatos.add(ar3);
+        ar1.addCursoAoCandidato(eng1.clone());ar1.addCursoAoCandidato(eng2.clone());candidatos.add(ar1.clone());
+        ar2.addCursoAoCandidato(eng1.clone());ar2.addCursoAoCandidato(eng2.clone());candidatos.add(ar2.clone());
+        ar3.addCursoAoCandidato(eng1.clone());ar3.addCursoAoCandidato(eng2.clone());candidatos.add(ar3.clone());
         //addTodosCandidatosTodososCursos();
-        eng1.addCandidatoColocado(ar1);eng1.addCandidatoColocado(ar2);eng1.addCandidatoColocado(ar3);
-        eng2.addCandidatoColocado(ar1);eng2.addCandidatoColocado(ar2);eng2.addCandidatoColocado(ar3);
+        eng1.addCandidatoColocado(ar1.clone());eng1.addCandidatoColocado(ar2.clone());eng1.addCandidatoColocado(ar3.clone());
+        eng2.addCandidatoColocado(ar1.clone());eng2.addCandidatoColocado(ar2.clone());eng2.addCandidatoColocado(ar3.clone());
+
         aprovacao();
+        ar1.showListaCursosDoCandidato();
         showCandidatos();
-        eng1.show();
-        eng2.show();
+        eng1.showListaColocados();
+        eng2.showListaColocados();
 
     }
 
@@ -159,81 +154,86 @@ public class GestaoAcesso
 
 
     public void lerFicheiro(){
+        File f = new File("candidatos.ser");
+        File ff = new File("cursos.ser");
 
-        //Ler Ficheiro de dados dos candidatos
-        try{
-            File f = new File("candidatos.ser");
-            if (!f.exists())
-                return;
-            FileInputStream fis = new FileInputStream(f);
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            listaCandidatos =(HashMap) ois.readObject();
-            ois.close();
-            fis.close();
-        }catch (IOException E) {
-            System.out.println("Erro na leitura dos dados dos candidatos!");
-            E.printStackTrace();
-        }catch (ClassNotFoundException C) {
-            System.out.println("Classe não encontrada.");
-            C.printStackTrace();
+        if(f.exists()) {
+            //Ler Ficheiro de dados dos candidatos
+            try {
+
+                FileInputStream fis = new FileInputStream(f);
+                ObjectInputStream ois = new ObjectInputStream(fis);
+                ArrayList<Candidato> can = (ArrayList<Candidato>) ois.readObject();
+
+                for (Candidato cand : can)
+                    candidatos.add(cand.clone());
+
+                System.out.println(can);
+                ois.close();
+            } catch (IOException E) {
+                System.out.println("Erro na leitura dos dados dos candidatos!");
+                E.printStackTrace();
+            } catch (ClassNotFoundException C) {
+                System.out.println("Classe não encontrada.");
+                C.printStackTrace();
+            }
         }
 
-        //Ler Ficheiro de dados dos cursos
-        try{
-            File fC = new File("cursos.ser");
-            if (!fC.exists())
-                return;
+        if (ff.exists()) {
+            try {
 
-            ObjectInputStream ois2 = new ObjectInputStream(new FileInputStream(fC));
-            listaCursos = (HashMap) ois2.readObject();
-            ois2.close();
+                FileInputStream fis2 = new FileInputStream(ff);
+                ObjectInputStream ois2 = new ObjectInputStream(fis2);
+                ArrayList<Curso> curso1 = (ArrayList<Curso>) ois2.readObject();
 
-        }catch (IOException E) {
-            System.out.println("Erro na leitura dos dados dos cursos!");
-            E.printStackTrace();
-        }catch (ClassNotFoundException C) {
-            System.out.println("Classe não encontrada.");
-            C.printStackTrace();
+                for (Curso cur : curso1)
+                    curso.add(cur.clone());
+
+                ois2.close();
+            } catch (IOException E) {
+                System.out.println("Erro na leitura dos dados dos candidatos!");
+                E.printStackTrace();
+            } catch (ClassNotFoundException C) {
+                System.out.println("Classe não encontrada.");
+                C.printStackTrace();
+            }
         }
-
     }
 
     public void guardaFicheiro(){
         try{
-            File ff = new File("candidatos.ser");
-            if (!ff.exists()){
-                ff.createNewFile();
+            File fc = new File("candidatos.ser");
+            if (!fc.exists()){
+                fc.createNewFile();
             }
-            FileOutputStream fos = new FileOutputStream(ff);
+
+            FileOutputStream fos = new FileOutputStream(fc);
             ObjectOutputStream out = new ObjectOutputStream(fos);
-            out.writeObject(listaCandidatos);
+            out.writeObject(candidatos);
             out.flush();
             out.close();
             fos.close();
         }catch (IOException E){
             System.out.println("Erro no Output dos dados de candidato.");
+            E.printStackTrace();
         }
 
 
         try{
-            File ffC = new File("cursos.ser");
-            if (!ffC.exists()){
-                ffC.createNewFile();
+            File fc2 = new File("cursos.ser");
+            if (!fc2.exists()){
+                fc2.createNewFile();
             }
-            FileOutputStream fos2 = new FileOutputStream(ffC);
-            ObjectOutputStream out = new ObjectOutputStream(fos2);
-            out.writeObject(listaCursos);
-            out.flush();
-            out.close();
+            FileOutputStream fos2 = new FileOutputStream(fc2);
+            ObjectOutputStream out2 = new ObjectOutputStream(fos2);
+            out2.writeObject(curso);
+            out2.flush();
+            out2.close();
             fos2.close();
         }catch (IOException E){
             System.out.println("Erro no Output dos dados dos cursos.");
+            E.printStackTrace();
         }
     }
-
-
-
-
-
 
 }

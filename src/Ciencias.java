@@ -9,6 +9,10 @@ public class Ciencias extends Curso{
     }
 
     public Ciencias clone() {
-        return new Ciencias(super.getNome(), super.getUni(), super.getNum());
+        Ciencias temp = new Ciencias(super.getNome(), super.getUni(), super.getNum());
+        for(Candidato i: super.getListaColocados())
+            temp.addCandidatoColocado(i);
+
+        return temp;
     }
 }

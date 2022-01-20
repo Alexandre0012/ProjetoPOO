@@ -109,21 +109,21 @@ public class AcessoES
                             i++;
                         }
                     }
-                    int bonus3 = 0;
-                    AlunoRegular ar = new AlunoRegular(cNome, cGenero, idd, cNotaA, cNotaB, cNotaIng, cNotaSec, bonus3);
-                    idd = ar.getID();
-                    gestaoacesso.addCandidato(ar.clone());
+                    if (cReg == 2 && cNesEsp == 2){
+                        int bonus3 = 0;
+                        AlunoRegular ar = new AlunoRegular(cNome, cGenero, idd, cNotaA, cNotaB, cNotaIng, cNotaSec, bonus3);
+                        idd = ar.getID();
+                        gestaoacesso.addCandidato(ar.clone());
 
-
-                    System.out.println("** Lista de cursos: **");
-                    gestaoacesso.showCursos();
-                    int i = 0;
-                    while(i < 5){
-                        System.out.println("Escolha até 5 cursos");
-                        int opcCurso = scanI.nextInt();
-                        gestaoacesso.adicionaEscolha(ar.clone(), opcCurso);
-                        i++;
-                    }
+                        System.out.println("** Lista de cursos: **");
+                        gestaoacesso.showCursos();
+                        int i = 0;
+                        while(i < 5){
+                            System.out.println("Escolha até 5 cursos");
+                            int opcCurso = scanI.nextInt();
+                            gestaoacesso.adicionaEscolha(ar.clone(), opcCurso);
+                            i++;
+                        }}
 
                     break;
 
@@ -178,11 +178,6 @@ public class AcessoES
 
                 case 3:
                     clearScreen();
-                    //gestaoacesso.addTodosCandidatosTodososCursos();
-                    gestaoacesso.teste();
-
-
-
                     System.out.println("Introduza o seu id: ");
                     int id = scanI.nextInt();
 
@@ -229,6 +224,10 @@ public class AcessoES
 
                         switch (opc2) {
                             case 1:
+                                for(Curso curso: gestaoacesso.getListaCurso()){
+                                    curso.showListaColocados();
+                                }
+
                                 break;
 
                             case 2:
@@ -241,6 +240,11 @@ public class AcessoES
 
                     break;
 
+                case 5:
+                    //gestaoacesso.addTodosCandidatosTodososCursos();
+                    //gestaoacesso.teste();
+
+                    break;
                 case 0:
                     System.out.print("Obrigado por usar a nossa aplicação!!\n");
                     gestaoacesso.guardaFicheiro();

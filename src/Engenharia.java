@@ -14,6 +14,10 @@ public class Engenharia extends Curso {
     }
 
     public Engenharia clone() {
-        return new Engenharia(super.getNome(), super.getUni(), super.getNum());
+        Engenharia temp = new Engenharia(super.getNome(), super.getUni(), super.getNum());
+        for(Candidato i: super.getListaColocados())
+            temp.addCandidatoColocado(i);
+
+        return temp;
     }
 }

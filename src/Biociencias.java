@@ -9,7 +9,10 @@ public class Biociencias extends Curso{
     }
 
     public Biociencias clone() {
-        return new Biociencias(super.getNome(), super.getUni(), super.getNum());
-    }
+        Biociencias temp = new Biociencias(super.getNome(), super.getUni(), super.getNum());
+        for(Candidato i: super.getListaColocados())
+            temp.addCandidatoColocado(i);
 
+        return temp;
+    }
 }

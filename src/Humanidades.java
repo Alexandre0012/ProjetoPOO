@@ -12,6 +12,10 @@ public class Humanidades extends Curso {
     }
 
     public Humanidades clone() {
-        return new Humanidades(super.getNome(), super.getUni(), super.getNum());
+        Humanidades temp = new Humanidades(super.getNome(), super.getUni(), super.getNum());
+        for(Candidato i: super.getListaColocados())
+            temp.addCandidatoColocado(i);
+
+        return temp;
     }
 }

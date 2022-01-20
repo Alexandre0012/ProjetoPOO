@@ -16,8 +16,12 @@ public class AlunoEspeciais extends Candidato
     private String getIncapacidade(){ return this.incapacidade; }
 
     public AlunoEspeciais clone() {
-        return new AlunoEspeciais(super.getNome(), super.getGenero(), super.getID(), super.getNotaA(),
+        AlunoEspeciais temp = new AlunoEspeciais(super.getNome(), super.getGenero(), super.getID(), super.getNotaA(),
                 super.getNotaB(), super.getNotaIngles(), super.getMediaSecundario(), super.getBonus(), this.getNivelNecessidade(), this.getIncapacidade());
+        for(Curso c: super.getCursoDoCandidato())
+            temp.addCursoAoCandidato(c);
+
+        return temp;
     }
 
 }

@@ -2,8 +2,6 @@ import java.util.ArrayList;
 
 public class CJuridicas extends Curso{
 
-    //private ArrayList<> ListaCjuridicas;
-
     public CJuridicas(String n, String uni, int nu) {
         super(n,uni,nu);
     }
@@ -13,7 +11,11 @@ public class CJuridicas extends Curso{
     }
 
     public CJuridicas clone() {
-        return new CJuridicas(super.getNome(), super.getUni(), super.getNum());
+        CJuridicas temp = new CJuridicas(super.getNome(), super.getUni(), super.getNum());
+        for(Candidato i: super.getListaColocados())
+            temp.addCandidatoColocado(i);
+
+        return temp;
     }
 
 }

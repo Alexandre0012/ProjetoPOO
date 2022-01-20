@@ -9,8 +9,12 @@ public class AlunoRegular extends Candidato
 
     public AlunoRegular clone()
     {
-        return new AlunoRegular(super.getNome(), super.getGenero(), super.getID(), super.getNotaA(),
+        AlunoRegular temp = new AlunoRegular(super.getNome(), super.getGenero(), super.getID(), super.getNotaA(),
                 super.getNotaB(), super.getNotaIngles(), super.getMediaSecundario(), super.getBonus());
+        for(Curso c: super.getCursoDoCandidato())
+            temp.addCursoAoCandidato(c);
+
+        return temp;
     }
 
 }

@@ -1,7 +1,7 @@
 import java.util.*;
 import java.io.*;
 
-public abstract class Candidato
+public abstract class Candidato implements Serializable
 {
     private String nome;
     private String genero;
@@ -39,21 +39,21 @@ public abstract class Candidato
     public int getMediaSecundario(){ return this.media_secundario; }
     public int getBonus(){ return this.bonus; }
     public boolean getAprovado(){ return this.aprovado; }
-    public void addCursoAoCandidato(Curso curso)
-    {
+    public void addCursoAoCandidato(Curso curso) {
         this.ListaCursosDoCandidato.add(curso.clone());
     }
 
-    public List<Curso> getCursoDoCandidato()
+    public ArrayList<Curso> getCursoDoCandidato()
     {
         ArrayList<Curso> temp = new ArrayList<Curso>();
-        for(Curso c: this.ListaCursosDoCandidato)
-            temp.add(c);
+        for(Curso c: this.ListaCursosDoCandidato){
+           temp.add(c.clone());
+        }
         return temp;
     }
 
     public void showListaCursosDoCandidato(){
-        for(Curso curso: ListaCursosDoCandidato){
+        for(Curso curso: this.ListaCursosDoCandidato){
             System.out.println(curso.getNome());
         }
     }
@@ -69,24 +69,6 @@ public abstract class Candidato
             i++;
         }
     }
-
-    /*public void aprovacao(){
-
-        for(Curso curso: this.ListaC.values()){
-           // curso.retiraCandidatos();
-            if(curso.retiraCandidatos(this, curso)){
-                this.ListaC.replace("aprovado", curso.clone());
-                this.aprovado = true;
-            }
-            else {
-                this.ListaC.replace("reprovado", curso.clone());
-                curso.remove(this);
-                this.aprovado = false;
-            }
-
-        }
-
-    }*/
 
     //Métodos Comuns 
     public boolean equals(Object obj)

@@ -15,8 +15,12 @@ public class AlunoRegioes extends Candidato
 
     public AlunoRegioes clone()
     {
-        return new AlunoRegioes(super.getNome(), super.getGenero(), super.getID(),super.getNotaA(),
+        AlunoRegioes temp = new AlunoRegioes(super.getNome(), super.getGenero(), super.getID(),super.getNotaA(),
                 super.getNotaB(), super.getNotaIngles(), super.getMediaSecundario(), super.getBonus(), this.getCodigoRegiao());
+        for(Curso c: super.getCursoDoCandidato())
+            temp.addCursoAoCandidato(c);
+
+        return temp;
     }
 
 }
