@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class GestaoAcesso
+public class GestaoAcesso implements Serializable
 {
     private static ArrayList<Candidato> candidatos;   //lista de todos os candidatos
     private static ArrayList<Curso> curso;            //lista de todos os cursos
@@ -75,6 +75,13 @@ public class GestaoAcesso
         }
     }
 
+    public void addListaCurso(Curso c,TreeSet<Candidato> l)
+    {
+        if(c != null){
+            ListadeCursos.put(c,l);
+        }
+    }
+
     public void showCursos(){
         int i = 1;
         for(Curso c: curso){
@@ -90,21 +97,33 @@ public class GestaoAcesso
         }
     }
 
+    public void showColocados(){
+        for(Curso cc: ListadeCursos.keySet()){
+            TreeSet<Candidato> temp = ListadeCursos.get(cc);
+            System.out.println(cc.toString());
+            for(Candidato c: temp){
+                System.out.println("Nome: " + c.getNome()
+                            + "   Media: " + cc.calcmedia(c));
+            }
+
+        }
+    }
+
     public void removeCandidatoDaListaDoCurso(Candidato candidato, Curso curso){
         for(Curso cc: ListadeCursos.keySet()){
             TreeSet<Candidato> temp = ListadeCursos.get(cc);
             if(cc.equals(curso)){
-                for(Candidato c: temp){
-                    if(c.equals(candidato)){
-                        temp.remove(candidato);
-                    }
-                }
+                //System.out.println("alo vieira");
+                //System.out.println(temp);
+                temp.remove(candidato);
+                //System.out.println("alo tonio");
+                //System.out.println(temp);
             }
         }
     }
 
     public boolean candidatoExiste(int x){
-        for(Candidato c: candidatos){
+        for(Candidato c: ListadeCandidatos.keySet()){
             if(c.getID() == x) return true;
         }
         return false;
@@ -148,15 +167,12 @@ public class GestaoAcesso
         for(Curso curso: ListadeCursos.keySet()){
             TreeSet<Candidato> temp = ListadeCursos.get(curso);
             Iterator<Candidato> iterator = temp.iterator();
-            System.out.println("aqui  " + curso.toString() + cc.toString());
             if(curso.equals(cc)){
-                System.out.println("llllll");
                 while (iterator.hasNext()){
                     Candidato candidato = iterator.next();
-                    System.out.println(candidato + "\n" + curso.getNum());
                     i++;
                     if(i <= curso.getNum()){
-                        System.out.println("ali");
+                        //System.out.println("ali");
                         if(candidato.equals(c)) return true;
                     }
                 }
@@ -181,11 +197,12 @@ public class GestaoAcesso
                 for(Curso curso: temp){
                     i++;
                     if(i != pos){
-                        curso.remove(candidato);
+                        //curso.remove(candidato);
                         removeCandidatoDaListaDoCurso(candidato,curso);
-                        System.out.println("cheguei retira1");
+                        //System.out.println("cheguei retira1");
                     }
-                    else System.out.println("cheguei retira2"); candidato.setAprovado();
+                    else //System.out.println("cheguei retira2");
+                        candidato.setAprovado();
                 }
                 i=0;
             }
@@ -201,7 +218,7 @@ public class GestaoAcesso
                 //System.out.println("tou2" + curso.getListaColocados());
                 //curso.showListaColocados();
                 if(verificaColocacao(candidato, curso)){
-                    System.out.println("tou3");
+                    //System.out.println("tou3");
                     retiraCandidatosDasOpcoes(candidato,pos);
                 }
                 pos++;
@@ -215,37 +232,71 @@ public class GestaoAcesso
 
         Engenharia eng1 = new Engenharia("Eng1", "minho", 2);
         Engenharia eng2 = new Engenharia("Eng2", "faro", 2);
+        Engenharia eng3 = new Engenharia("Eng3", "porto", 2);
+        Engenharia eng4 = new Engenharia("Eng4", "lisboa", 2);
+        Engenharia eng5 = new Engenharia("Eng5", "coimbra", 2);
 
         AlunoRegular ar1 = new AlunoRegular("cesar", "male", 7, 100, 100, 100, 100, 20);
-
         AlunoRegular ar2 = new AlunoRegular("alex", "female", 8, 100, 100, 100, 100, 50);
-
         AlunoRegular ar3 = new AlunoRegular("rica", "undefined", 9, 140, 140, 140, 140, 0);
+        AlunoRegular ar4 = new AlunoRegular("rato", "undefined", 10, 190, 190, 190, 190, 0);
+        AlunoRegular ar5 = new AlunoRegular("ze", "female", 11, 110, 110, 110, 110, 0);
 
-        ar1.addCursoAoCandidato(eng1.clone());ar1.addCursoAoCandidato(eng2.clone());ListadeCandidatos.put(ar1.clone(), ar1.getCursoDoCandidato());
-        ar2.addCursoAoCandidato(eng1.clone());ar2.addCursoAoCandidato(eng2.clone());ListadeCandidatos.put(ar2.clone(), ar2.getCursoDoCandidato());
-        ar3.addCursoAoCandidato(eng1.clone());ar3.addCursoAoCandidato(eng2.clone());ListadeCandidatos.put(ar3.clone(), ar3.getCursoDoCandidato());
+        ar1.addCursoAoCandidato(eng3.clone());ar1.addCursoAoCandidato(eng1.clone());
+        ar1.addCursoAoCandidato(eng2.clone());ar1.addCursoAoCandidato(eng5.clone());
+        ar1.addCursoAoCandidato(eng4.clone());ListadeCandidatos.put(ar1.clone(), ar1.getCursoDoCandidato());
+
+        ar2.addCursoAoCandidato(eng5.clone());ar2.addCursoAoCandidato(eng4.clone());
+        ar2.addCursoAoCandidato(eng1.clone());ar2.addCursoAoCandidato(eng3.clone());
+        ar2.addCursoAoCandidato(eng2.clone());ListadeCandidatos.put(ar2.clone(), ar2.getCursoDoCandidato());
+
+        ar3.addCursoAoCandidato(eng2.clone());ar3.addCursoAoCandidato(eng1.clone());
+        ar3.addCursoAoCandidato(eng3.clone());ar3.addCursoAoCandidato(eng5.clone());
+        ar3.addCursoAoCandidato(eng4.clone());ListadeCandidatos.put(ar3.clone(), ar3.getCursoDoCandidato());
+
+        ar4.addCursoAoCandidato(eng1.clone());ar4.addCursoAoCandidato(eng2.clone());
+        ar4.addCursoAoCandidato(eng3.clone());ar4.addCursoAoCandidato(eng4.clone());
+        ar4.addCursoAoCandidato(eng5.clone());ListadeCandidatos.put(ar4.clone(), ar4.getCursoDoCandidato());
+
+        ar5.addCursoAoCandidato(eng4.clone());ar5.addCursoAoCandidato(eng1.clone());
+        ar5.addCursoAoCandidato(eng5.clone());ar5.addCursoAoCandidato(eng3.clone());
+        ar5.addCursoAoCandidato(eng2.clone());ListadeCandidatos.put(ar5.clone(), ar5.getCursoDoCandidato());
+
+
         //addTodosCandidatosTodososCursos();
-        eng1.addCandidatoColocado(ar1.clone());eng1.addCandidatoColocado(ar2.clone());eng1.addCandidatoColocado(ar3.clone());ListadeCursos.put(eng1.clone(),eng1.getListaColocados());
-        eng2.addCandidatoColocado(ar1.clone());eng2.addCandidatoColocado(ar2.clone());eng2.addCandidatoColocado(ar3.clone());ListadeCursos.put(eng2.clone(),eng2.getListaColocados());
+        eng1.addCandidatoColocado(ar1.clone());eng1.addCandidatoColocado(ar2.clone());eng1.addCandidatoColocado(ar3.clone());
+        eng1.addCandidatoColocado(ar4.clone());eng1.addCandidatoColocado(ar5.clone());ListadeCursos.put(eng1.clone(),eng1.getListaColocados());
+
+        eng2.addCandidatoColocado(ar1.clone());eng2.addCandidatoColocado(ar2.clone());eng2.addCandidatoColocado(ar3.clone());
+        eng2.addCandidatoColocado(ar4.clone());eng2.addCandidatoColocado(ar5.clone());ListadeCursos.put(eng2.clone(),eng2.getListaColocados());
+
+        eng3.addCandidatoColocado(ar1.clone());eng3.addCandidatoColocado(ar2.clone());eng3.addCandidatoColocado(ar3.clone());
+        eng3.addCandidatoColocado(ar4.clone());eng3.addCandidatoColocado(ar5.clone());ListadeCursos.put(eng3.clone(),eng3.getListaColocados());
+
+        eng4.addCandidatoColocado(ar1.clone());eng4.addCandidatoColocado(ar2.clone());eng4.addCandidatoColocado(ar3.clone());
+        eng4.addCandidatoColocado(ar4.clone());eng4.addCandidatoColocado(ar5.clone());ListadeCursos.put(eng4.clone(),eng4.getListaColocados());
+
+        eng5.addCandidatoColocado(ar1.clone());eng5.addCandidatoColocado(ar2.clone());eng5.addCandidatoColocado(ar3.clone());
+        eng5.addCandidatoColocado(ar4.clone());eng5.addCandidatoColocado(ar5.clone());ListadeCursos.put(eng5.clone(),eng5.getListaColocados());
 
         //aprovacao();
         int pos = 1;
         for(Candidato candidato: ListadeCandidatos.keySet()){
             ArrayList<Curso> temp = ListadeCandidatos.get(candidato);
             for(Curso cc: temp){
-                System.out.println(cc);
+                //System.out.println(cc);
                 if(verificaColocacao(candidato, cc)){
-                    System.out.println("tou 3");
+                    //System.out.println("tou 3");
                     retiraCandidatosDasOpcoes(candidato, pos);
                 }
-                else System.out.println("tou 4");cc.remove(candidato);
+                else //System.out.println("tou 4");
+                    cc.remove(candidato);
+
                 pos++;
             }
             pos = 1;
         }
-        eng1.showListaColocados();
-        eng2.showListaColocados();
+        showColocados();
 
     }
 
@@ -260,35 +311,43 @@ public class GestaoAcesso
     }
 
 
-    public void mostraResultadoCandidatura(int id){
+    public boolean mostraResultadoCandidatura(int id){
 
-        for(Candidato candidato: candidatos){
+        for(Candidato candidato: ListadeCandidatos.keySet()){
+            ArrayList<Curso> temp = ListadeCandidatos.get(candidato);
             if(candidato.getID() == id){
-                if(candidato.getAprovado()){
+                for(Curso c: temp){
+                    if(candidato.existe(c)){
+                        System.out.println("COLOCADO");
+                        System.out.println("Colocado em: " + c);
+                        return true;
+                    }
+                }
+                /*if(candidato.getAprovado()){
                     System.out.println("COLOCADO");
                     mostraColocacaoDoCandidato(candidato);
                 }
-                else System.out.println("NAO COLOCADO");
+                else System.out.println("NAO COLOCADO");*/
             }
         }
+        return false;
     }
 
 
-    public void lerFicheiro(){
+    /*public void lerFicheiro() {
         File f = new File("candidatos.ser");
         File ff = new File("cursos.ser");
 
-        if(f.exists()) {
+        if (f.exists()) {
             //Ler Ficheiro de dados dos candidatos
             try {
-
                 FileInputStream fis = new FileInputStream(f);
                 ObjectInputStream ois = new ObjectInputStream(fis);
-                ArrayList<Candidato> can = (ArrayList<Candidato>) ois.readObject();
-
-                for (Candidato cand : can)
-                    candidatos.add(cand.clone());
-
+                HashMap<Candidato, ArrayList<Curso>> can = (HashMap<Candidato, ArrayList<Curso>>) ois.readObject();
+                for(Candidato c: can.keySet()){
+                    ArrayList<Curso> temp = can.get(c);
+                    ListadeCandidatos.put(c, temp);
+                }
                 System.out.println(can);
                 ois.close();
             } catch (IOException E) {
@@ -300,16 +359,17 @@ public class GestaoAcesso
             }
         }
 
-        /*if (ff.exists()) {
+        if (ff.exists()) {
+            //Ler Ficheiro de dados dos candidatos
             try {
-
                 FileInputStream fis2 = new FileInputStream(ff);
                 ObjectInputStream ois2 = new ObjectInputStream(fis2);
-                ArrayList<Curso> curso1 = (ArrayList<Curso>) ois2.readObject();
-
-                for (Curso cur : curso1)
-                    curso.add(cur.clone());
-
+                HashMap<Curso, TreeSet<Candidato>> can = (HashMap<Curso, TreeSet<Candidato>>) ois2.readObject();
+                for(Curso c: can.keySet()){
+                    TreeSet<Candidato> temp = can.get(c);
+                    ListadeCursos.put(c, temp);
+                }
+                System.out.println(can);
                 ois2.close();
             } catch (IOException E) {
                 System.out.println("Erro na leitura dos dados dos candidatos!");
@@ -318,43 +378,44 @@ public class GestaoAcesso
                 System.out.println("Classe não encontrada.");
                 C.printStackTrace();
             }
-        }*/
+        }
     }
 
-    public void guardaFicheiro(){
-        try{
+    public void guardaFicheiro() {
+        try {
             File fc = new File("candidatos.ser");
-            if (!fc.exists()){
+            if (!fc.exists()) {
                 fc.createNewFile();
             }
 
             FileOutputStream fos = new FileOutputStream(fc);
             ObjectOutputStream out = new ObjectOutputStream(fos);
-            out.writeObject(candidatos);
+            out.writeObject(ListadeCandidatos);
             out.flush();
             out.close();
             fos.close();
-        }catch (IOException E){
+        } catch (IOException E) {
             System.out.println("Erro no Output dos dados de candidato.");
             E.printStackTrace();
         }
 
 
-        /*try{
+        try {
             File fc2 = new File("cursos.ser");
-            if (!fc2.exists()){
+            if (!fc2.exists()) {
                 fc2.createNewFile();
             }
             FileOutputStream fos2 = new FileOutputStream(fc2);
             ObjectOutputStream out2 = new ObjectOutputStream(fos2);
-            out2.writeObject(curso);
+            out2.writeObject(ListadeCursos);
             out2.flush();
             out2.close();
             fos2.close();
-        }catch (IOException E){
+        } catch (IOException E) {
             System.out.println("Erro no Output dos dados dos cursos.");
             E.printStackTrace();
-        }*/
-    }
+        }
+
+    }*/
 
 }

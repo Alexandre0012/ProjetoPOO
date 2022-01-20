@@ -62,8 +62,8 @@ public abstract class Curso implements Serializable
 
     public String toString()
     {
-        return "Universidade: " + this.uni +
-                "\nNome do Curso: " + this.nome;
+        return "Nome do Curso: " + this.nome
+                +"\nUniversidade: " + this.uni;
     }
 
     public boolean equals(Object o){

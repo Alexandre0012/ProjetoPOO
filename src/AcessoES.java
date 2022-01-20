@@ -21,7 +21,7 @@ public class AcessoES
         int opctipocurso = -1; //opcao curso
         int idd=0, idcurso=0;
 
-        gestaoacesso.lerFicheiro();
+        //gestaoacesso.lerFicheiro();
 
         //Menu
         do {
@@ -71,7 +71,6 @@ public class AcessoES
 
                         AlunoRegioes areg = new AlunoRegioes(cNome, cGenero, idd, cNotaA, cNotaB, cNotaIng, cNotaSec, bonus, cRegCode);
                         idd = areg.getID();
-                        gestaoacesso.addCandidato(areg.clone());
 
                         System.out.println("** Lista de cursos: **");
                         gestaoacesso.showCursos();
@@ -82,6 +81,7 @@ public class AcessoES
                             gestaoacesso.adicionaEscolha(areg.clone(), opcCurso);
                             i++;
                         }
+                        gestaoacesso.addCandidato(areg.clone());
                         gestaoacesso.addListaCandidato(areg.clone(),areg.getCursoDoCandidato());
                     }
 
@@ -101,7 +101,6 @@ public class AcessoES
                         gestaoacesso.addCandidato(ae.clone());
 
                         System.out.println("** Lista de cursos: **");
-                        gestaoacesso.showCursos();
                         int i = 0;
                         while(i < 5){
                             System.out.println("Escolha até 5 cursos");
@@ -109,12 +108,13 @@ public class AcessoES
                             gestaoacesso.adicionaEscolha(ae.clone(), opcCurso);
                             i++;
                         }
+                        gestaoacesso.showCursos();
+                        gestaoacesso.addListaCandidato(ae.clone(),ae.getCursoDoCandidato());
                     }
                     if (cReg == 2 && cNesEsp == 2){
                         int bonus3 = 0;
                         AlunoRegular ar = new AlunoRegular(cNome, cGenero, idd, cNotaA, cNotaB, cNotaIng, cNotaSec, bonus3);
                         idd = ar.getID();
-                        gestaoacesso.addCandidato(ar.clone());
 
                         System.out.println("** Lista de cursos: **");
                         gestaoacesso.showCursos();
@@ -124,7 +124,10 @@ public class AcessoES
                             int opcCurso = scanI.nextInt();
                             gestaoacesso.adicionaEscolha(ar.clone(), opcCurso);
                             i++;
-                        }}
+                        }
+                        gestaoacesso.addCandidato(ar.clone());
+                        gestaoacesso.addListaCandidato(ar.clone(),ar.getCursoDoCandidato());
+                    }
 
                     break;
 
@@ -154,31 +157,37 @@ public class AcessoES
                     if (opctipocurso == 1) {
                         Biociencias bio = new Biociencias(NomeUni, NomeCurso, NumClaus);
                         gestaoacesso.addCurso(bio.clone());
+                        gestaoacesso.addListaCurso(bio.clone(), bio.getListaColocados());
                         break;
                     }
                     if (opctipocurso == 2) {
                         Ciencias cie = new Ciencias(NomeUni, NomeCurso, NumClaus);
                         gestaoacesso.addCurso(cie.clone());
+                        gestaoacesso.addListaCurso(cie.clone(), cie.getListaColocados());
                         break;
                     }
                     if (opctipocurso == 3) {
                         CJuridicas juri = new CJuridicas(NomeUni, NomeCurso, NumClaus);
                         gestaoacesso.addCurso(juri.clone());
+                        gestaoacesso.addListaCurso(juri.clone(), juri.getListaColocados());
                         break;
                     }
                     if (opctipocurso == 4) {
                         Engenharia eng = new Engenharia(NomeUni, NomeCurso, NumClaus);
                         gestaoacesso.addCurso(eng.clone());
+                        gestaoacesso.addListaCurso(eng.clone(), eng.getListaColocados());
                         break;
                     }
                     if (opctipocurso == 5) {
                         Humanidades hum = new Humanidades(NomeUni, NomeCurso, NumClaus);
                         gestaoacesso.addCurso(hum.clone());
+                        gestaoacesso.addListaCurso(hum.clone(), hum.getListaColocados());
                         break;
                     }
 
                 case 3:
                     clearScreen();
+                    gestaoacesso.teste();
                     System.out.println("Introduza o seu id: ");
                     int id = scanI.nextInt();
 
@@ -250,7 +259,7 @@ public class AcessoES
                     break;
                 case 0:
                     System.out.print("Obrigado por usar a nossa aplicação!!\n");
-                    gestaoacesso.guardaFicheiro();
+                    //gestaoacesso.guardaFicheiro();
 
                     break;
 
