@@ -53,44 +53,29 @@ public abstract class Curso implements Serializable
     { return this.ListaColocados.contains(c);}
     public void showListaColocados(){
         System.out.println("\n" + this.getNome() + ",  " + this.getUni() + "\n");
-        System.out.println("1");
         for(Candidato candidato: this.ListaColocados){
-            System.out.println("2");
             System.out.println(candidato.getNome() + ", " + calcmedia(candidato));
         }
     }
 
-    public boolean verificaColocacao(Candidato c, Curso cc){
-        int i = 1;
-        Iterator<Candidato> temp = cc.ListaColocados.iterator();
-
-        while (temp.hasNext()){
-            System.out.println("cheguei aqui");
-            Candidato candidato = temp.next();
-            if(i <= this.getNum()){
-                System.out.println("cheguei aqui2");
-                if(candidato == c) return true;
-            }
-            i++;
-        }
-        return false;
-        /*int i = 1;
-        for(Candidato candidato: ListaColocados){
-            System.out.println("cheguei aqui");
-            if(i <= this.getNum()){
-                System.out.println("cheguei aqui2");
-                if(candidato == c) return true;
-            }
-            i++;
-        }
-        return false;*/
-    }
 
 
     public String toString()
     {
         return "Universidade: " + this.uni +
                 "\nNome do Curso: " + this.nome;
+    }
+
+    public boolean equals(Object o){
+        if(o!=null){
+            if(this.getClass()==o.getClass()){
+                Curso c = (Curso) o;
+                if(this.getUni()== c.getUni() && this.getNome() == c.getNome()){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public abstract double calcmedia(Candidato c);

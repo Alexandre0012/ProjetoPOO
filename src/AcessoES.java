@@ -82,6 +82,7 @@ public class AcessoES
                             gestaoacesso.adicionaEscolha(areg.clone(), opcCurso);
                             i++;
                         }
+                        gestaoacesso.addListaCandidato(areg.clone(),areg.getCursoDoCandidato());
                     }
 
                     System.out.print("Aluno/a com necessidades especiais? ** 1-SIM || 2-NÃO **");
@@ -224,7 +225,9 @@ public class AcessoES
 
                         switch (opc2) {
                             case 1:
+                                gestaoacesso.teste();
                                 for(Curso curso: gestaoacesso.getListaCurso()){
+                                    //gestaoacesso.aprovacao();
                                     curso.showListaColocados();
                                 }
 

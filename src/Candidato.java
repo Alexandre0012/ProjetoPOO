@@ -39,6 +39,7 @@ public abstract class Candidato implements Serializable
     public int getMediaSecundario(){ return this.media_secundario; }
     public int getBonus(){ return this.bonus; }
     public boolean getAprovado(){ return this.aprovado; }
+    public void setAprovado(){ this.aprovado = !this.aprovado;}
     public void addCursoAoCandidato(Curso curso) {
         this.ListaCursosDoCandidato.add(curso.clone());
     }
@@ -52,23 +53,16 @@ public abstract class Candidato implements Serializable
         return temp;
     }
 
+    public void adicionaCursoaSuaLista(Curso c){
+            c.addCandidatoColocado(this);
+    }
+
     public void showListaCursosDoCandidato(){
         for(Curso curso: this.ListaCursosDoCandidato){
             System.out.println(curso.getNome());
         }
     }
 
-    public void retiraCandidatosDasOpcoes(Candidato c, int pos){
-        int i = 1;
-        for(Curso curso: this.ListaCursosDoCandidato){
-            if(i == pos){
-                c.aprovado = true;
-            }
-            else curso.remove(c);
-
-            i++;
-        }
-    }
 
     //Métodos Comuns 
     public boolean equals(Object obj)
