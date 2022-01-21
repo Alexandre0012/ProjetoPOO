@@ -38,7 +38,6 @@ public abstract class Candidato implements Serializable
     public int getNotaIngles(){ return this.nota_ingles; }
     public int getMediaSecundario(){ return this.media_secundario; }
     public int getBonus(){ return this.bonus; }
-    public boolean getAprovado(){ return this.aprovado; }
     public void setAprovado(){ this.aprovado = !this.aprovado;}
     public void addCursoAoCandidato(Curso curso) {
         this.ListaCursosDoCandidato.add(curso.clone());
@@ -53,19 +52,9 @@ public abstract class Candidato implements Serializable
         return temp;
     }
 
-    public boolean existeCurso(Curso c)
-    { return this.ListaCursosDoCandidato.contains(c);}
-
     public void adicionaCursoaSuaLista(Curso c){
             c.addCandidatoColocado(this);
     }
-
-    public void showListaCursosDoCandidato(){
-        for(Curso curso: this.ListaCursosDoCandidato){
-            System.out.println(curso.getNome());
-        }
-    }
-
 
     //Métodos Comuns 
     public boolean equals(Object obj)

@@ -4,8 +4,8 @@ import java.util.spi.CalendarNameProvider;
 
 public class GestaoAcesso implements Serializable
 {
-    private static ArrayList<Candidato> candidatos;   //lista de todos os candidatos
-    private static ArrayList<Curso> curso;            //lista de todos os cursos
+    private static ArrayList<Candidato> candidatos;                          //lista de todos os candidatos
+    private static ArrayList<Curso> curso;                                   //lista de todos os cursos
     private static HashMap<Candidato, ArrayList<Curso>> ListadeCandidatos;   //map com todos os candidatos e respetiva lista de cursos
     private static HashMap<Curso, TreeSet<Candidato>> ListadeCursos;         //map com todos os cursos e respetiva lista de candidatos
 
@@ -84,19 +84,30 @@ public class GestaoAcesso implements Serializable
     }
 
     public void escolheCurso(Candidato candidato, int opc){
-        int i = 0;
+        int i = 1;
         for(Curso curso: ListadeCursos.keySet()){
             if(i == opc){
                 adicionaCursoAoCandidato(candidato, curso);
                 adicionaCandidatoAoCurso(candidato,curso);
             }
+            i++;
+        }
+    }
+
+    public void mostraCursoPelaPosicao(int pos){
+        int i = 1;
+        for(Curso curso: ListadeCursos.keySet()){
+            if(i == pos){
+                System.out.println(curso.toString());
+            }
+            i++;
         }
     }
 
     public void showCursos(){
         int i = 1;
         for(Curso c: ListadeCursos.keySet()){
-            System.out.println(i + ":" + "Nome: " + c.getNome() + "Universidade: " + c.getUni());
+            System.out.println(i + ":" + "Nome: " + c.getNome() + "    Universidade: " + c.getUni());
             i++;
         }
     }
@@ -118,6 +129,22 @@ public class GestaoAcesso implements Serializable
 
         }
     }
+
+    public void showColocadosPorCurso(int opc){
+        int i = 1;
+        for(Curso curso: ListadeCursos.keySet()){
+            TreeSet<Candidato> temp = ListadeCursos.get(curso);
+            if(i == opc){
+                System.out.println(curso);
+                for(Candidato c: temp){
+                    System.out.println("Nome: " + c.getNome()
+                            + "  Media: " + curso.calcmedia(c));
+                }
+            }
+            i++;
+        }
+    }
+
 
     public void adicionaCursoAoCandidato(Candidato candidato, Curso curso){
         for(Candidato c: ListadeCandidatos.keySet()){
@@ -169,17 +196,17 @@ public class GestaoAcesso implements Serializable
     }
 
     public boolean verificaColocacao(Candidato c, Curso cc){
-        int i = 0;
+        int i = 1;
         for(Curso curso: ListadeCursos.keySet()){
             TreeSet<Candidato> temp = ListadeCursos.get(curso);
             Iterator<Candidato> iterator = temp.iterator();
             if(curso.equals(cc)){
                 while (iterator.hasNext()){
                     Candidato candidato = iterator.next();
-                    i++;
                     if(i <= curso.getNum()){
                         if(candidato.equals(c)) return true;
                     }
+                    i++;
                 }
                 i=0;
             }
@@ -188,17 +215,18 @@ public class GestaoAcesso implements Serializable
     }
 
     public void retiraCandidatosDasOpcoes(Candidato candidato, int pos){
-        int i = 0;
+        int i = 1;
         for(Candidato c: ListadeCandidatos.keySet()){
             ArrayList<Curso> temp = ListadeCandidatos.get(c);
             if(c.equals(candidato)){
                 for(Curso curso: temp){
-                    i++;
-                    if(i > pos){
+                    if(i != pos){
                         removeCandidatoDaListaDoCurso(candidato,curso);
                     }
                     if(i == pos)
                         candidato.setAprovado();
+
+                    i++;
                 }
                 i=0;
             }
@@ -231,11 +259,11 @@ public class GestaoAcesso implements Serializable
         Engenharia eng4 = new Engenharia("Eng4", "lisboa", 2);
         Engenharia eng5 = new Engenharia("Eng5", "coimbra", 2);
 
-        AlunoRegular ar1 = new AlunoRegular("cesar", "male", 7, 100, 100, 100, 100, 20);
-        AlunoRegular ar2 = new AlunoRegular("alex", "female", 8, 100, 100, 100, 100, 50);
-        AlunoRegular ar3 = new AlunoRegular("rica", "undefined", 9, 140, 140, 140, 140, 0);
-        AlunoRegular ar4 = new AlunoRegular("rato", "undefined", 10, 190, 190, 190, 190, 0);
-        AlunoRegular ar5 = new AlunoRegular("ze", "female", 11, 110, 110, 110, 110, 0);
+        AlunoRegular ar1 = new AlunoRegular("aluno 1", "Masculino", 7, 100, 100, 100, 100, 20);
+        AlunoRegular ar2 = new AlunoRegular("aluno 2", "Feminino", 8, 100, 100, 100, 100, 50);
+        AlunoRegular ar3 = new AlunoRegular("aluno 3", "Masculino", 9, 140, 140, 140, 140, 0);
+        AlunoRegular ar4 = new AlunoRegular("aluno 4", "Feminino", 10, 190, 190, 190, 190, 0);
+        AlunoRegular ar5 = new AlunoRegular("aluno 5", "Masculino", 11, 110, 110, 110, 110, 0);
 
         ar1.addCursoAoCandidato(eng3.clone());ar1.addCursoAoCandidato(eng1.clone());
         ar1.addCursoAoCandidato(eng2.clone());ar1.addCursoAoCandidato(eng5.clone());
@@ -249,7 +277,7 @@ public class GestaoAcesso implements Serializable
         ar3.addCursoAoCandidato(eng3.clone());ar3.addCursoAoCandidato(eng5.clone());
         ar3.addCursoAoCandidato(eng4.clone());ListadeCandidatos.put(ar3.clone(), ar3.getCursoDoCandidato());
 
-        ar4.addCursoAoCandidato(eng1.clone());ar4.addCursoAoCandidato(eng2.clone());
+        ar4.addCursoAoCandidato(eng3.clone());ar4.addCursoAoCandidato(eng2.clone());
         ar4.addCursoAoCandidato(eng3.clone());ar4.addCursoAoCandidato(eng4.clone());
         ar4.addCursoAoCandidato(eng5.clone());ListadeCandidatos.put(ar4.clone(), ar4.getCursoDoCandidato());
 
@@ -275,17 +303,87 @@ public class GestaoAcesso implements Serializable
     }
 
     public void mostraResultadoCandidatura(int id){
-
         for(Candidato candidato: ListadeCandidatos.keySet()){
             ArrayList<Curso> temp = ListadeCandidatos.get(candidato);
             if(candidato.getID() == id){
                 for(Curso c: temp){
                     if(candidatoExisteNoCurso(candidato)){
-                        System.out.println("Colocado em: " + c);
+                        System.out.println("Colocado em: " + c);return;
                     }
                 }
             }
         }
+    }
+
+    public int cursoMediaMaisAlta(){
+
+        int i = 1;
+        double menorCurso = 201;
+        double menorTotal = -1;
+        int pos = -1;
+        for(Curso curso: ListadeCursos.keySet()) {
+            TreeSet<Candidato> temp = ListadeCursos.get(curso);
+            Iterator<Candidato> iterator = temp.iterator();
+            while (iterator.hasNext()){
+                Candidato candidato = iterator.next();
+                if (curso.calcmedia(candidato) < menorCurso){
+                    menorCurso = curso.calcmedia(candidato);
+                }
+                if(menorCurso > menorTotal){
+                    menorTotal = menorCurso;
+                    pos = i;
+                }
+            }
+            i++;
+        }
+        return pos;
+    }
+
+    public int cursoMediaMaisBaixa(){
+
+        int i = 1;
+        double menorCurso = 201;
+        double menorTotal = 201;
+        int pos = -1;
+        for(Curso curso: ListadeCursos.keySet()) {
+            TreeSet<Candidato> temp = ListadeCursos.get(curso);
+            Iterator<Candidato> iterator = temp.iterator();
+            while (iterator.hasNext()){
+                Candidato candidato = iterator.next();
+                if (curso.calcmedia(candidato) < menorCurso){
+                    menorCurso = curso.calcmedia(candidato);
+                }
+                if(menorCurso < menorTotal){
+                    menorTotal = menorCurso;
+                    pos = i;
+                }
+            }
+            i++;
+        }
+        return pos;
+    }
+
+    public int cursoMaisFeminino(){
+        int i = 1;
+        int max = -1;
+        int x = 0;
+        int posCurso = -1;
+        for(Curso curso: ListadeCursos.keySet()){
+            TreeSet<Candidato> temp = ListadeCursos.get(curso);
+            Iterator<Candidato> iterator = temp.iterator();
+            while(iterator.hasNext()){
+                Candidato candidato = iterator.next();
+                if(candidato.getGenero().equals("Feminino")){
+                    x++;
+                }
+            }
+            if(x > max){
+                max = x;
+                posCurso = i;
+            }
+            i++;
+        }
+        return posCurso;
     }
 
 

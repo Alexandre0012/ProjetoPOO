@@ -38,9 +38,15 @@ public abstract class Curso implements Serializable
         if (calcmedia(x1) < calcmedia(x2)){
             return  1;
         }
-        else
-        if (calcmedia(x1) == calcmedia(x2)) { //implementa desempate de acordo com o enunciado!!
-
+        else if (calcmedia(x1) == calcmedia(x2)) {
+            if(x1.getBonus() < x2.getBonus())  return 1;
+            else if(x1.getBonus() == x2.getBonus()){
+                if(x1.getGenero().equals("Feminino")) return -1;
+                else if(x1.getGenero().equals("Masculino")){
+                    if(x2.getGenero().equals("Masculino")) return -1;
+                    else return 1;
+                }
+            }
         }
         return  -1;
     };

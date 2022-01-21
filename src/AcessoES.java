@@ -11,25 +11,22 @@ public class AcessoES
         Scanner scanI = new Scanner(System.in);   //Integer scanner
         Scanner scanS = new Scanner(System.in);   //String scanner
 
-        //Candidato c = null;
-        //Curso cur = null;
-
-        //Map<Integer, Candidato> acesso=null;
-        //List<Curso> acessocurso;
-
         int opc1 = -1, opc2 = -1;  //opcao menu1, menu2
         int opctipocurso = -1; //opcao curso
-        int idd=0, idcurso=0;
+        int  opcGenero = -1;
+        int idd=0;
 
         //gestaoacesso.lerFicheiro();
 
         //Menu
         do {
             clearScreen();
+            System.out.println("*** Acesso ao Ensino Superior ***");
             System.out.println("1. Registar Candidato");
             System.out.println("2. Registar Curso");
             System.out.println("3. Mostrar Resultado da Candidatura");
             System.out.println("4. Listar");
+            System.out.println("5. Créditos");
             System.out.println("0. EXIT");
 
             System.out.print("Escolha a sua opção: ");
@@ -44,24 +41,64 @@ public class AcessoES
                     idd++;
 
                     System.out.print("Nome: ");
-                    String cNome = scanS.nextLine();
+                    String cNome = scanS.next();
 
-                    System.out.print("Género: ");
-                    String cGenero = scanS.nextLine();
+                    System.out.println("Género: ");
+                    System.out.println("Selecione uma das opções:" );
+                    System.out.println("1. Masculino");
+                    System.out.println("2. Feminino");
+
+                    opcGenero = scanI.nextInt();
+
+                    while(opcGenero < 1 || opcGenero > 2){
+                        System.out.println("A  opção não existe!");
+                        System.out.println("Por favor introduza uma opção válida ");
+                        opcGenero = scanI.nextInt();
+                    }
+
+                    String cGenero = "";
+                    if(opcGenero == 1)
+                        cGenero = "Masculino";
+                    else
+                        cGenero = "Feminino";
 
                     System.out.print("Nota Exame A: ");
                     int cNotaA = scanI.nextInt();
 
+                    while(cNotaA < 0 || cNotaA > 200){
+                        System.out.print("Nota InváLida!! Introduza novamente!! ");
+                        System.out.print("Nota Exame A: ");
+                        cNotaA = scanI.nextInt();
+                    }
+
                     System.out.print("Nota Exame B: ");
                     int cNotaB = scanI.nextInt();
+
+                    while(cNotaB < 0 || cNotaB > 200){
+                        System.out.print("Nota Inválida!! Introduza novamente!! ");
+                        System.out.print("Nota Exame B: ");
+                        cNotaB = scanI.nextInt();
+                    }
 
                     System.out.print("Nota Exame Inglês: ");
                     int cNotaIng = scanI.nextInt();
 
+                    while(cNotaIng < 0 || cNotaIng > 200){
+                        System.out.print("Nota Inválida!! Introduza novamente!! ");
+                        System.out.print("Nota Exame Inglês: ");
+                        cNotaIng = scanI.nextInt();
+                    }
+
                     System.out.print("Media Secundário: ");
                     int cNotaSec = scanI.nextInt();
 
-                    System.out.print("Aluno/a de Regiao Desfavorecida? ** 1-SIM || 2-NÃO **");
+                    while(cNotaSec < 0 || cNotaSec > 200){
+                        System.out.print("Nota Inválida!! Introduza novamente!! ");
+                        System.out.print("Média Secundária: ");
+                        cNotaSec = scanI.nextInt();
+                    }
+
+                    System.out.print("Aluno/a de Região Desfavorecida? ** 1-SIM || 2-NÃO **: ");
                     int cReg = scanS.nextInt();
 
                     if (cReg == 1) {
@@ -70,7 +107,6 @@ public class AcessoES
                         int bonus = 20;
 
                         AlunoRegioes areg = new AlunoRegioes(cNome, cGenero, idd, cNotaA, cNotaB, cNotaIng, cNotaSec, bonus, cRegCode);
-                        idd = areg.getID();
                         gestaoacesso.addCandidato(areg.clone());
 
                         System.out.println("** Lista de cursos: **");
@@ -79,13 +115,13 @@ public class AcessoES
                         int i = 0;
                         while(i < 5){
                             int opcCurso = scanI.nextInt();
-                            gestaoacesso.adicionaEscolha(areg.clone(), opcCurso);
+                            gestaoacesso.escolheCurso(areg.clone(), opcCurso);
                             i++;
                         }
                         gestaoacesso.addListaCandidato(areg.clone(),areg.getCursoDoCandidato());
                     }
 
-                    System.out.print("Aluno/a com necessidades especiais? ** 1-SIM || 2-NÃO **");
+                    System.out.print("Aluno/a com necessidades especiais? ** 1-SIM || 2-NÃO **: ");
                     int cNesEsp = scanS.nextInt();
 
                     if (cNesEsp == 1) {
@@ -97,7 +133,6 @@ public class AcessoES
                         int bonus1 = 50;
 
                         AlunoEspeciais ae = new AlunoEspeciais(cNome, cGenero, idd, cNotaA, cNotaB, cNotaIng, cNotaSec, bonus1, cNivelNecessidade, cTipoIncap);
-                        idd = ae.getID();
                         gestaoacesso.addCandidato(ae.clone());
 
                         System.out.println("** Lista de cursos: **");
@@ -114,7 +149,6 @@ public class AcessoES
                     if (cReg == 2 && cNesEsp == 2){
                         int bonus3 = 0;
                         AlunoRegular ar = new AlunoRegular(cNome, cGenero, idd, cNotaA, cNotaB, cNotaIng, cNotaSec, bonus3);
-                        idd = ar.getID();
                         gestaoacesso.addCandidato(ar.clone());
 
                         System.out.println("** Lista de cursos: **");
@@ -187,46 +221,29 @@ public class AcessoES
 
                 case 3:
                     clearScreen();
-                    gestaoacesso.teste();
+                    //gestaoacesso.teste();
+                    gestaoacesso.aprovacao();
                     System.out.println("Introduza o seu id: ");
                     int id = scanI.nextInt();
                     while(!gestaoacesso.candidatoExiste(id)){
-                        System.out.println("O candidato nao existe!");
-                        System.out.println("Por favor introduza um id valido ");
+                        System.out.println("O candidato não existe!");
+                        System.out.println("Por favor introduza um id válido!");
                         id = scanI.nextInt();
                     }
-                    gestaoacesso.aprovacao();
                     gestaoacesso.mostraResultadoCandidatura(id);
-
-                    /*System.out.println("Introduza a sua primeira escolha: ");
-                    String nomeCan1 = scanS.nextLine();
-
-
-                    System.out.println("Introduza a sua segunda escolha: ");
-                    String nomeCan2 = scanS.nextLine();
-
-                    System.out.println("Introduza a sua terceira escolha: ");
-                    String nomeCan3 = scanS.nextLine();
-
-                    System.out.println("Introduza a sua quarta escolha: ");
-                    String nomeCan4 = scanS.nextLine();
-
-                    System.out.println("Introduza a sua quinta escolha: ");
-                    String nomeCan5 = scanS.nextLine();*/
-
 
                     break;
 
                 case 4:
                     do {
                         clearScreen();
-                        gestaoacesso.teste();
+                        //gestaoacesso.teste();
                         gestaoacesso.aprovacao();
-                        System.out.println("1. Listar Colocados");
-                        System.out.println("2. Mostar Curso com média mais alta");
-                        System.out.println("3. Mostrar Curso com média mais baixa");
-                        System.out.println("4. Listar alunos colocados 1ªopção");
-                        System.out.println("5. Listar curso colocados 1ªopção");
+                        System.out.println("1. Listar colocados");
+                        System.out.println("2. Listar colocados de um curso");
+                        System.out.println("3. Mostrar Curso com média mais alta");
+                        System.out.println("4. Mostrar Curso com média mais baixa");
+                        System.out.println("5. Curso com mais candidatos do genero feminino");
                         System.out.println("0. Voltar ao Menu Anterior");
 
                         System.out.print("Escolha a sua opção: ");
@@ -239,8 +256,32 @@ public class AcessoES
                                 break;
 
                             case 2:
+                                gestaoacesso.showCursos();
+                                System.out.println("Introduza a opcao do curso:");
+                                int opccurso = scanI.nextInt();
+                                gestaoacesso.showColocadosPorCurso(opccurso);
                                 break;
 
+                            case 3:
+                                int posCurso = gestaoacesso.cursoMediaMaisAlta();
+                                gestaoacesso.mostraCursoPelaPosicao(posCurso);
+                                break;
+
+                            case 4:
+                                int posCurso1 = gestaoacesso.cursoMediaMaisBaixa();
+                                gestaoacesso.mostraCursoPelaPosicao(posCurso1);
+                                break;
+
+                            case 5:
+                                int posCurso2 = gestaoacesso.cursoMaisFeminino();
+                                gestaoacesso.mostraCursoPelaPosicao(posCurso2);
+                                break;
+                            default:
+                                System.out.println("Escolha uma opção válida!\n");
+                                break;
+
+                            case 0:
+                                break;
                         }
 
 
@@ -249,10 +290,11 @@ public class AcessoES
                     break;
 
                 case 5:
-                    //gestaoacesso.addTodosCandidatosTodososCursos();
-                    //gestaoacesso.teste();
-
+                    System.out.println("Alexandre Ribeiro A93092");
+                    System.out.println("César Castro A93090");
+                    System.out.println("Ricardo Peixoto A93081");
                     break;
+
                 case 0:
                     System.out.print("Obrigado por usar a nossa aplicação!!\n");
                     //gestaoacesso.guardaFicheiro();
